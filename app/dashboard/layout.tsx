@@ -1,3 +1,4 @@
+import { Metadata } from 'next';
 import SideNav from '@/app/ui/dashboard/sidenav';
 
 export default function Layout({ children }: { children:React.ReactNode }) {
@@ -9,4 +10,8 @@ export default function Layout({ children }: { children:React.ReactNode }) {
       <div className="grow p-6 md:overflow-y-auto md:p-12">{children}</div>
     </div>
   )
+}
+
+export const metadata: Metadata = {
+  title: 'Dashboard',
 }
