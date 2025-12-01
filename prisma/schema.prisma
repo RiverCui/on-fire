@@ -1,0 +1,139 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// ==========================================
+// User & Auth (用户与认证)
+// ==========================================
+
+model User {
+  id       String  @id @default(cuid())
+  email    String  @unique
+  password String?
+  name     String?
+  image    String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // 关系字段
+  firePlans       FirePlan[]
+  assetAccounts   AssetAccount[]
+  cashFlowRecords CashFlowRecord[]
+}
+
+// ==========================================
+// FIRE Simulator (退休模拟配置)
+// ==========================================
+
+model FirePlan {
+  id     String @id @default(cuid())
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  name String @default("我的退休计划")
+
+  // 关键参数
+  currentAge     Int
+  retirementAge  Int
+  lifeExpectancy Int
+
+  annualExpense  Decimal @db.Decimal(10, 2) // 退休后的年支出
+  withdrawalRate Decimal @default(0.04) // 安全提款率(4% 法则)
+  expectedReturn Decimal @default(0.05) // 预期投资年回报率(5%)
+  inflationRate  Decimal @default(0.03) // 通货膨胀率(3%)
+
+  note      String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// ==========================================
+// Assets (资产存量管理)
+// ==========================================
+
+// 1. 资产账户
+model AssetAccount {
+  id     String @id @default(cuid())
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  name     String
+  type     AssetType
+  currency String    @default("CNY")
+
+  currentBalance Decimal @default(0) @db.Decimal(15, 2) // 当前余额，不需要再聚合查询 AssetRecord 表
+
+  // 关系字段
+  records AssetRecord[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// 2. 资产历史快照
+model AssetRecord {
+  id String @id @default(cuid())
+
+  assetAccountId String
+  assetAccount   AssetAccount @relation(fields: [assetAccountId], references: [id], onDelete: Cascade)
+
+  recordDate DateTime @default(now()) // 记录的日期
+  amount     Decimal  @db.Decimal(15, 2) // 该日期的账户余额快照
+  note       String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([assetAccountId, recordDate]) // 复合索引，加速查询(按账户和日期查询)
+}
+
+// ==========================================
+// Cash Flow (现金流管理)
+// ==========================================
+model CashFlowRecord {
+  id     String @id @default(cuid())
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  recordDate DateTime @default(now()) // 记录的日期
+  type       FlowType // 收入或支出
+
+  amount   Decimal @db.Decimal(15, 2)
+  category String?
+  note     String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId, recordDate]) // 复合索引，加速查询(按用户和日期查询)
+}
+
+// ==========================================
+// Enums (枚举定义)
+// ==========================================
+enum AssetType {
+  CASH // 现金
+  STOCK // 股票
+  BOND // 债券
+  REAL_ESTATE // 房产
+  CRYPTO // 加密货币
+  DEBT // 负债
+  OTHER // 其他
+}
+
+enum FlowType {
+  INCOME // 收入
+  EXPENSE // 支出
+}
