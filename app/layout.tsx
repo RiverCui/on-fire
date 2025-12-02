@@ -1,24 +1,11 @@
-import '@/components/ui/global.css';
-import { inter, notoSans, notoSerif } from '@/components/ui/fonts';
-import { Metadata } from 'next';
+import { ReactNode } from 'react';
 
-export const metadata: Metadata = {
-  title: {
-    template: '%s | FIRE Dashboard',
-    default: 'FIRE',
-  },
-  // description: 'The official Next.js Course Dashboard, built with App Router.',
-  // metadataBase: new URL('https://next-learn-dashboard.vercel.sh'),
+type Props = {
+  children: ReactNode;
 }
 
 export default function RootLayout({
   children,
-}: {
-  children: React.ReactNode;
-}) {
-  return (
-    <html lang="en">
-      <body className={`${inter.variable} ${notoSans.variable} ${notoSerif.variable} antialiased`}>{children}</body>
-    </html>
-  );
+}: Props) {
+  return children;
 }
