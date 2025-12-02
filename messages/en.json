@@ -1,9 +1,102 @@
 {
   "Dashboard": {
-    "overview": "Overview"
+    "overview": "Overview",
+    "account": "Asset Account",
+    "cashflow": "Cash Flow",
+    "settings": "Settings"
   },
   "Metadata": {
     "title": "FIRE Dashboard",
     "description": "FIRE dashboard overview"
+  },
+  "LoginForm": {
+    "heading": "Please log in to continue.",
+    "emailLabel": "Email",
+    "emailPlaceholder": "Enter your email address",
+    "passwordLabel": "Password",
+    "passwordPlaceholder": "Enter your password",
+    "submit": "Log in"
+  },
+  "DashboardLayout": {
+    "brandName": "FIRE Master",
+    "brandTagline": "Own your assets · Quantify freedom",
+    "dailyMetricsTitle": "Today's FIRE snapshot",
+    "dailyMetricsSubtitle": "Track today's savings rate and stay in compounding rhythm.",
+    "dailyMetricsButton": "Quick entry",
+    "welcomeBack": "Welcome back",
+    "dashboardTitle": "Your FIRE dashboard",
+    "dashboardSubtitle": "Every log brings you closer to freedom—aim for a 50% savings rate today.",
+    "notificationsButton": "Notifications",
+    "newPlanButton": "New plan",
+    "language": "Language"
+  },
+  "DashboardPage": {
+    "metrics": {
+      "netWorth": {
+        "label": "Net worth",
+        "change": "+3.2%"
+      },
+      "savingsRate": {
+        "label": "Savings rate",
+        "change": "+5% YoY"
+      },
+      "cash": {
+        "label": "Cash on hand",
+        "change": "Stable"
+      }
+    },
+    "progressSection": {
+      "title": "FIRE progress",
+      "subtitle": "Marching toward ¥5M in financial freedom assets",
+      "badge": "Goal 68%",
+      "fields": {
+        "accumulated": "Accumulated",
+        "target": "Target",
+        "fireDate": "Projected FIRE date"
+      }
+    },
+    "cashflow": {
+      "title": "Cash flow updates",
+      "subtitle": "Last 7 days",
+      "button": "View all"
+    },
+    "recentFlows": {
+      "salary": {
+        "label": "Salary income",
+        "date": "Nov 28"
+      },
+      "investment": {
+        "label": "ETF DCA",
+        "date": "Nov 26"
+      },
+      "sideHustle": {
+        "label": "Side hustle income",
+        "date": "Nov 24"
+      }
+    },
+    "allocation": {
+      "title": "Asset allocation",
+      "subtitle": "Multi-account, multi-currency",
+      "description": "Banking, brokerage, funds, digital assets, even mortgage positions can be tracked here with API sync or manual updates.",
+      "items": {
+        "stocks": "· Stocks: 40% · Long-term growth mix",
+        "cash": "· Cash: 25% · Liquidity pool",
+        "bonds": "· Bonds: 20% · Steady income",
+        "other": "· Other: 15% · Crypto & real estate"
+      }
+    },
+    "nextStep": {
+      "label": "Next Step",
+      "title": "Update December income and ETF DCA plan",
+      "description": "Spending is on budget this month. Keep savings above 50% and deploy new funds into the diversified portfolio.",
+      "button": "Log it"
+    }
+  },
+  "AuthLoginPage": {
+    "brandLabel": "FIRE Master",
+    "heading": "Welcome back—keep advancing your freedom rate.",
+    "description": "Log in to update assets, record cash flow, review retirement simulations, and monitor live metrics. Everything is encrypted and visible only to you.",
+    "formTitle": "Log into your account",
+    "formSubtitle": "Enter your email and password. More login methods are coming soon."
   }
 }

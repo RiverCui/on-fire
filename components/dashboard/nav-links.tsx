@@ -15,17 +15,17 @@ export default function NavLinks() {
       href: "/dashboard",
     },
     {
-      label: "资产账户",
+      label: t('account'),
       icon: Wallet,
-      href: "/dashboard/accounts",
+      href: "/dashboard/account",
     },
     {
-      label: "现金流",
+      label: t('cashflow'),
       icon: TrendingUp,
       href: "/dashboard/cashflow",
     },
     {
-      label: "设置",
+      label: t('settings'),
       icon: Settings,
       href: "/dashboard/settings",
     },

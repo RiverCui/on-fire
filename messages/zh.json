@@ -1,9 +1,102 @@
 {
   "Dashboard": {
-    "overview": "概览"
+    "overview": "概览",
+    "account": "资产账户",
+    "cashflow": "现金流",
+    "settings": "设置"
   },
   "Metadata": {
     "title": "FIRE 控制台",
     "description": "FIRE 控制台概览"
+  },
+  "LoginForm": {
+    "heading": "请登录以继续。",
+    "emailLabel": "邮箱",
+    "emailPlaceholder": "请输入邮箱地址",
+    "passwordLabel": "密码",
+    "passwordPlaceholder": "请输入密码",
+    "submit": "登录"
+  },
+  "DashboardLayout": {
+    "brandName": "FIRE Master",
+    "brandTagline": "掌控资产 · 量化自由",
+    "dailyMetricsTitle": "今日 FIRE 指标",
+    "dailyMetricsSubtitle": "记录今日储蓄率，保持复利节奏。",
+    "dailyMetricsButton": "快速记一笔",
+    "welcomeBack": "欢迎回来",
+    "dashboardTitle": "你的 FIRE 仪表盘",
+    "dashboardSubtitle": "每一次记录都是向自由迈进的一步，今天也保持 50% 的储蓄率吧。",
+    "notificationsButton": "通知",
+    "newPlanButton": "新建计划",
+    "language": "语言"
+  },
+  "DashboardPage": {
+    "metrics": {
+      "netWorth": {
+        "label": "当前净资产",
+        "change": "+3.2%"
+      },
+      "savingsRate": {
+        "label": "储蓄率",
+        "change": "+5% 同比"
+      },
+      "cash": {
+        "label": "可支配现金",
+        "change": "稳定"
+      }
+    },
+    "progressSection": {
+      "title": "FIRE 进度",
+      "subtitle": "朝着 500 万自由资产迈进",
+      "badge": "目标 68%",
+      "fields": {
+        "accumulated": "已积累",
+        "target": "目标",
+        "fireDate": "预测自由日"
+      }
+    },
+    "cashflow": {
+      "title": "现金流动态",
+      "subtitle": "最近 7 日",
+      "button": "查看全部"
+    },
+    "recentFlows": {
+      "salary": {
+        "label": "工资收入",
+        "date": "11月 28日"
+      },
+      "investment": {
+        "label": "ETF 定投",
+        "date": "11月 26日"
+      },
+      "sideHustle": {
+        "label": "副业收入",
+        "date": "11月 24日"
+      }
+    },
+    "allocation": {
+      "title": "资产配置",
+      "subtitle": "多账户，多币种",
+      "description": "银行、券商、基金、数字资产甚至房产抵押，都可以纳入其中，支持 API 接入或手动更新。",
+      "items": {
+        "stocks": "· 股票：40% · 长期增长组合",
+        "cash": "· 现金：25% · 流动资金池",
+        "bonds": "· 债券：20% · 稳健收益",
+        "other": "· 其他：15% · 加密 & 房产"
+      }
+    },
+    "nextStep": {
+      "label": "下一步",
+      "title": "更新 12 月收入与 ETF 定投计划",
+      "description": "本月支出已控制在预算范围。建议保持 50% 以上储蓄率，并将新增资金投入多资产组合。",
+      "button": "去记录"
+    }
+  },
+  "AuthLoginPage": {
+    "brandLabel": "FIRE Master",
+    "heading": "欢迎回来，继续推进你的自由率。",
+    "description": "登录后即可更新资产、记录现金流、查看退休模拟与实时指标。所有数据安全加密存储，仅你可见。",
+    "formTitle": "登录账户",
+    "formSubtitle": "输入邮箱和密码，后续也会支持更多方式。"
   }
 }
