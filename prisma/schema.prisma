@@ -49,10 +49,11 @@ model FirePlan {
   retirementAge  Int
   lifeExpectancy Int
 
-  annualExpense  Decimal @db.Decimal(10, 2) // 退休后的年支出
-  withdrawalRate Decimal @default(0.04) // 安全提款率(4% 法则)
-  expectedReturn Decimal @default(0.05) // 预期投资年回报率(5%)
-  inflationRate  Decimal @default(0.03) // 通货膨胀率(3%)
+  annualExpense  Decimal  @db.Decimal(10, 2) // 退休后的年支出
+  withdrawalRate Decimal  @default(0.04) // 安全提款率(4% 法则)
+  expectedReturn Decimal  @default(0.05) // 预期投资年回报率(5%)
+  inflationRate  Decimal  @default(0.03) // 通货膨胀率(3%)
+  customTarget   Decimal? @db.Decimal(12, 2) // 自定义目标金额
 
   note      String?
   createdAt DateTime @default(now())

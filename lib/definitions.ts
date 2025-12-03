@@ -52,6 +52,7 @@ export type FirePlan = Timestamped & {
   withdrawalRate: DecimalValue;
   expectedReturn: DecimalValue;
   inflationRate: DecimalValue;
+  customTarget: DecimalValue | null;
   note: string | null;
 };
 
@@ -108,6 +109,7 @@ export const firePlanFormSchema = z.object({
   withdrawalRate: percentSchema.default(0.04),
   expectedReturn: percentSchema.default(0.05),
   inflationRate: percentSchema.default(0.03),
+  customTarget: positiveMoney.optional().nullable(),
   note: z.string().trim().max(500).optional().nullable(),
 });
 
