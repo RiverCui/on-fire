@@ -1,9 +1,8 @@
-"use client";
-
-import { useEffect, useState } from 'react';
 import { ArrowUpRight, PiggyBank, Wallet, Zap } from 'lucide-react';
-import { Progress } from '@/components/ui/progress';
-import { useTranslations } from 'next-intl';
+import { getTranslations } from 'next-intl/server';
+import { auth } from '@/auth';
+import { fetchFirePlan, fetchFireProgress } from '@/lib/data';
+import AnimatedProgress from '@/components/dashboard/animated-progress';
 
 const glassCard =
   'rounded-3xl border border-white/10 bg-white/60 p-6 text-slate-900 shadow-lg backdrop-blur-xl';
@@ -14,13 +13,14 @@ const recentFlows = [
   { labelKey: 'recentFlows.sideHustle.label', amount: '+￥3,800', dateKey: 'recentFlows.sideHustle.date', positive: true },
 ];
 
-export default function Page() {
-  const t = useTranslations('DashboardPage');
-  const [progress, setProgress] = useState(12);
-  useEffect(() => {
-    const timer = setTimeout(() => setProgress(68), 500);
-    return () => clearTimeout(timer);
-  }, []);
+export default async function Page() {
+  const t = await getTranslations('DashboardPage');
+  const session = await auth();
+  const userId = session?.user?.id;
+  if (!userId) {
+    return <div>{t('pleaseLogin')}</div>;
+  }
+  const { progressValue } = await fetchFireProgress(userId);
 
   const metrics = [
     {
@@ -67,9 +67,7 @@ export default function Page() {
             </div>
             <span className="rounded-full bg-slate-900/80 px-3 py-1 text-xs text-white">{t('progressSection.badge')}</span>
           </div>
-          <Progress value={progress} className="h-3 w-full rounded-full bg-white/50">
-            <span />
-          </Progress>
+          <AnimatedProgress targetValue={progressValue} />
           <div className="flex flex-wrap gap-6 text-sm text-slate-600">
             <div>
               <p className="text-xs uppercase tracking-wide">{t('progressSection.fields.accumulated')}</p>
