@@ -9,7 +9,7 @@ import { getTranslations, setRequestLocale } from 'next-intl/server';
 
 export async function generateMetadata(props: Omit<LayoutProps<'/[locale]'>, 'children'>): Promise<Metadata> {
   const { locale } = await props.params;
-  const t = await getTranslations({ locale: locale as Locale, namespace: 'Metadata' });
+  const t = await getTranslations({ locale: locale as Locale, namespace: 'LocaleLayout' });
   return {
     title: {
       template: `%s | ${t('title')}`,

@@ -5,7 +5,7 @@
     "cashflow": "现金流",
     "settings": "设置"
   },
-  "Metadata": {
+  "LocaleLayout": {
     "title": "FIRE 控制台",
     "description": "FIRE 控制台概览"
   },
@@ -31,6 +31,7 @@
     "language": "语言"
   },
   "DashboardPage": {
+    "pleaseLogin": "请先登录以查看进度",
     "metrics": {
       "netWorth": {
         "label": "当前净资产",
