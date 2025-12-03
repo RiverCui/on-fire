@@ -40,3 +40,6 @@ AGENT.md
 
 # Prisma
 /generated/prisma
+
+# vscode
+.vscode/*
