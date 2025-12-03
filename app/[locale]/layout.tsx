@@ -30,7 +30,7 @@ export default async function LocaleLayout({
   setRequestLocale(locale);
   return (
     <html lang={locale}>
-      <body className={clsx(inter.variable, notoSans.variable, notoSerif.variable, 'antialiased')}>
+      <body className={clsx(inter.variable, notoSans.variable, notoSerif.variable, 'font-sans antialiased')}>
         <NextIntlClientProvider>
           {children}
         </NextIntlClientProvider>
