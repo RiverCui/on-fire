@@ -44,10 +44,10 @@ export default function NavLinks() {
 						key={link.label}
 						href={link.href}
 						className={cn(
-							"flex items-center gap-3 rounded-lg px-3 py-2.5 transition-all hover:bg-accent",
+							"flex items-center gap-3 rounded-lg px-3 py-2.5 transition-all",
 							isActive
-								? "bg-accent text-accent-foreground font-medium"
-								: "text-muted-foreground hover:text-accent-foreground"
+								? "bg-white/15 text-white font-medium backdrop-blur"
+								: "text-white/60 hover:bg-white/10 hover:text-white"
 						)}
 					>
 						<LinkIcon className="h-5 w-5" />

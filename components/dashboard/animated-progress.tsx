@@ -14,6 +14,6 @@ export default function AnimatedProgress({ targetValue }: { targetValue: number 
   }, [targetValue]);
 
   return (
-    <Progress value={progress} className="h-3 w-full rounded-full bg-white/50" />
+    <Progress value={progress} className="h-3 w-full rounded-full bg-white/20" />
   )
 }

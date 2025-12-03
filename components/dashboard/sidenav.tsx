@@ -11,13 +11,13 @@ export default async function SideNav() {
 		<div className="flex h-full flex-col px-3 py-4 md:px-4">
 			<div className="flex grow flex-col justify-between space-y-2">
 				<NavLinks />
-				<div className="m-4 rounded-2xl bg-slate-900 p-4 text-white">
-          <p className="text-sm font-semibold">{t('dailyMetricsTitle')}</p>
-          <p className="mt-1 text-xs text-slate-200">{t('dailyMetricsSubtitle')}</p>
+				<div className="m-4 rounded-2xl border border-white/20 bg-white/10 p-4 text-white backdrop-blur">
+          <p className="text-sm font-semibold text-white">{t('dailyMetricsTitle')}</p>
+          <p className="mt-1 text-xs text-white/70">{t('dailyMetricsSubtitle')}</p>
           <Button
             variant="secondary"
             size="sm"
-            className="mt-4 w-full bg-white text-slate-900 hover:bg-slate-100"
+            className="mt-4 w-full bg-white/90 text-slate-900 hover:bg-white"
           >
             {t('dailyMetricsButton')}
           </Button>
@@ -32,10 +32,10 @@ export default async function SideNav() {
 				>
 					<Button
 						variant="ghost"
-						className="w-full justify-start gap-2 text-muted-foreground hover:bg-accent hover:text-accent-foreground"
+						className="w-full justify-start gap-2 text-white/60 hover:bg-white/10 hover:text-white"
 					>
 						<LogOut className="h-5 w-5" />
-						<span className="--font-inter text-sm font-medium">Sign Out</span>
+						<span className="font-inter text-sm font-medium">Sign Out</span>
 					</Button>
 				</form>
 			</div>

@@ -23,12 +23,12 @@ export default function LongSwitcher() {
 
   return (
     <Select defaultValue={locale} onValueChange={handleChange}>
-      <SelectTrigger className="w-[100px]">
+      <SelectTrigger className="w-[100px] border-white/20 bg-white/10 text-white hover:bg-white/20">
         <SelectValue placeholder={t("language")} />
       </SelectTrigger>
-      <SelectContent>
-        <SelectItem value="zh">中文</SelectItem>
-        <SelectItem value="en">English</SelectItem>
+      <SelectContent className="border-white/20 bg-slate-900/95 text-white backdrop-blur-xl">
+        <SelectItem value="zh" className="hover:bg-white/10 focus:bg-white/10 focus:text-white">中文</SelectItem>
+        <SelectItem value="en" className="hover:bg-white/10 focus:bg-white/10 focus:text-white">English</SelectItem>
       </SelectContent>
     </Select>
   )
