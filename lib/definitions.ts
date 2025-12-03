@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import type { AssetType, FlowType, Prisma } from '@/generated/prisma/client';
+import { AssetType, FlowType, type Prisma } from '@/generated/prisma/client';
 
 // 登录表单验证
 export const LoginSchema = z.object({
