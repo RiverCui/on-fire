@@ -8,7 +8,9 @@ export const authConfig = {
     authorized({ auth, request: { nextUrl } }) {
       const isLoggedIn = !!auth?.user;
 
-      const isAuthPage = nextUrl.pathname.includes('/login');
+      const isAuthPage = ['/login', '/register'].some((segment) =>
+        nextUrl.pathname.includes(segment)
+      );
       const isPublicPage = nextUrl.pathname === '/' || isAuthPage;
 
       if(isPublicPage) {  // 访问公共页面

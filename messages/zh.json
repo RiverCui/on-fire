@@ -9,13 +9,38 @@
     "title": "FIRE 控制台",
     "description": "FIRE 控制台概览"
   },
-  "LoginForm": {
-    "heading": "请登录以继续。",
+  "AuthForm": {
+    "titles": {
+      "login": "登录账户",
+      "register": "创建新账户"
+    },
+    "subtitles": {
+      "login": "输入凭据即可在多端同步你的进度。",
+      "register": "这些信息用于个性化你的仪表盘体验。"
+    },
+    "nameLabel": "称呼",
+    "namePlaceholder": "我们该怎样称呼你？",
     "emailLabel": "邮箱",
     "emailPlaceholder": "请输入邮箱地址",
     "passwordLabel": "密码",
     "passwordPlaceholder": "请输入密码",
-    "submit": "登录"
+    "confirmPasswordLabel": "确认密码",
+    "confirmPasswordPlaceholder": "请再次输入密码",
+    "submit": {
+      "login": "登录",
+      "register": "注册"
+    },
+    "switchPrompt": {
+      "noAccount": "还没有账户？",
+      "createAccount": "去注册",
+      "haveAccount": "已经有账户？",
+      "logIn": "立即登录"
+    },
+    "oauthDivider": "或使用以下方式",
+    "oauth": {
+      "google": "使用 Google 登录",
+      "github": "使用 GitHub 登录"
+    }
   },
   "DashboardLayout": {
     "brandName": "FIRE Master",
@@ -99,5 +124,12 @@
     "description": "登录后即可更新资产、记录现金流、查看退休模拟与实时指标。所有数据安全加密存储，仅你可见。",
     "formTitle": "登录账户",
     "formSubtitle": "输入邮箱和密码，后续也会支持更多方式。"
+  },
+  "AuthRegisterPage": {
+    "brandLabel": "FIRE Master",
+    "heading": "注册你的账户，打造专属 FIRE 看板。",
+    "description": "创建一个私密空间，用于管理资产、现金流、退休模拟与自动化提醒。所有数据都会在你的区域内加密存储。",
+    "formTitle": "创建 FIRE Master 账户",
+    "formSubtitle": "注册后我们会根据你的资料定制仪表盘体验。"
   }
 }

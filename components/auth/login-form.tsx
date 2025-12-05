@@ -13,7 +13,7 @@ import { useSearchParams } from 'next/navigation';
 import { useTranslations } from 'next-intl';
  
 export default function LoginForm() {
-  const t = useTranslations('LoginForm');
+  const t = useTranslations('AuthForm');
   const searchParams = useSearchParams();
   const callbackUrl = searchParams.get('callbackUrl') || '/dashboard';
   const [errorMessage, formAction, isPending] = useActionState(

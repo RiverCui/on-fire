@@ -9,13 +9,38 @@
     "title": "FIRE Dashboard",
     "description": "FIRE dashboard overview"
   },
-  "LoginForm": {
-    "heading": "Please log in to continue.",
+  "AuthForm": {
+    "titles": {
+      "login": "Log into your account",
+      "register": "Create a new account"
+    },
+    "subtitles": {
+      "login": "Enter your credentials to sync progress across devices.",
+      "register": "We’ll use this info to personalize your dashboard."
+    },
+    "nameLabel": "Name",
+    "namePlaceholder": "How should we address you?",
     "emailLabel": "Email",
     "emailPlaceholder": "Enter your email address",
     "passwordLabel": "Password",
     "passwordPlaceholder": "Enter your password",
-    "submit": "Log in"
+    "confirmPasswordLabel": "Confirm password",
+    "confirmPasswordPlaceholder": "Re-enter your password",
+    "submit": {
+      "login": "Log in",
+      "register": "Create account"
+    },
+    "switchPrompt": {
+      "noAccount": "Don't have an account?",
+      "createAccount": "Create one",
+      "haveAccount": "Already have an account?",
+      "logIn": "Log in"
+    },
+    "oauthDivider": "Or continue with",
+    "oauth": {
+      "google": "Continue with Google",
+      "github": "Continue with GitHub"
+    }
   },
   "DashboardLayout": {
     "brandName": "FIRE Master",
@@ -99,5 +124,12 @@
     "description": "Log in to update assets, record cash flow, review retirement simulations, and monitor live metrics. Everything is encrypted and visible only to you.",
     "formTitle": "Log into your account",
     "formSubtitle": "Enter your email and password. More login methods are coming soon."
+  },
+  "AuthRegisterPage": {
+    "brandLabel": "FIRE Master",
+    "heading": "Create your account and own your FIRE playbook.",
+    "description": "Build a private dashboard for assets, cash flow, FIRE simulations, and automation. Your data stays encrypted on servers in your region.",
+    "formTitle": "Create a FIRE Master account",
+    "formSubtitle": "We’ll tailor the dashboard to your profile once you sign up."
   }
 }

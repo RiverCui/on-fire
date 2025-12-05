@@ -1,8 +1,8 @@
 import AuthForm from '@/components/auth/auth-form';
 import { getTranslations } from 'next-intl/server';
 
-export default async function LoginPage() {
-  const t = await getTranslations('AuthLoginPage');
+export default async function RegisterPage() {
+  const t = await getTranslations('AuthRegisterPage');
   return (
     <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-slate-950 px-4 py-12 text-white">
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(250,250,250,0.15),_transparent_60%)]" />
@@ -15,7 +15,7 @@ export default async function LoginPage() {
             {t('description')}
           </p>
         </div>
-        <AuthForm mode="login" />
+        <AuthForm mode="register" />
       </div>
     </div>
   );
