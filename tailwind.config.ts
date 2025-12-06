@@ -59,6 +59,9 @@ const config: Config = {
   				'5': 'hsl(var(--chart-5))'
   			}
   		},
+  		backgroundImage: {
+  			'gradient-text': 'linear-gradient(135deg, #5cb8ff 0%, #a78bfa 25%, #ec4899 75%, #f97316 100%)',
+  		},
   		fontFamily: {
   			sans: [
   				'var(--font-inter)',
