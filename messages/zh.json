@@ -131,5 +131,14 @@
     "description": "创建一个私密空间，用于管理资产、现金流、退休模拟与自动化提醒。所有数据都会在你的区域内加密存储。",
     "formTitle": "创建 FIRE Master 账户",
     "formSubtitle": "注册后我们会根据你的资料定制仪表盘体验。"
+  },
+  "SettingsPage": {
+    "title": "设置",
+    "description": "管理你的账户和偏好。",
+    "profile": {
+      "title": "个人资料",
+      "name": "姓名",
+      "email": "邮箱"
+    }
   }
 }

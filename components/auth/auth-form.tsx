@@ -6,12 +6,12 @@ import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { signIn } from 'next-auth/react';
 import {
-  AtSymbolIcon,
-  ExclamationCircleIcon,
-  KeyIcon,
-  UserIcon,
-} from '@heroicons/react/24/outline';
-import { ArrowRightIcon } from '@heroicons/react/20/solid';
+  AtSign,
+  CircleAlert,
+  Key,
+  User,
+  ArrowRight,
+} from 'lucide-react';
 
 import { authenticate, register } from '@/actions/auth';
 import { Button } from '@/components/ui/button';
@@ -69,7 +69,7 @@ export default function AuthForm({ mode }: AuthFormProps) {
                   required
                   minLength={2}
                 />
-                <UserIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-slate-400 peer-focus:text-slate-900" />
+                <User className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-slate-400 peer-focus:text-slate-900" />
               </div>
             </div>
           )}
@@ -87,7 +87,7 @@ export default function AuthForm({ mode }: AuthFormProps) {
                 placeholder={t('emailPlaceholder')}
                 required
               />
-              <AtSymbolIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-slate-400 peer-focus:text-slate-900" />
+              <AtSign className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-slate-400 peer-focus:text-slate-900" />
             </div>
           </div>
 
@@ -105,7 +105,7 @@ export default function AuthForm({ mode }: AuthFormProps) {
                 required
                 minLength={6}
               />
-              <KeyIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-slate-400 peer-focus:text-slate-900" />
+                <Key className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-slate-400 peer-focus:text-slate-900" />
             </div>
           </div>
 
@@ -127,7 +127,7 @@ export default function AuthForm({ mode }: AuthFormProps) {
                   required
                   minLength={6}
                 />
-                <KeyIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-slate-400 peer-focus:text-slate-900" />
+                  <Key className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-slate-400 peer-focus:text-slate-900" />
               </div>
             </div>
           )}
@@ -139,7 +139,7 @@ export default function AuthForm({ mode }: AuthFormProps) {
           aria-disabled={isPending}
         >
           {mode === 'login' ? t('submit.login') : t('submit.register')}
-          <ArrowRightIcon className="ml-auto h-5 w-5 text-white" />
+          <ArrowRight className="ml-auto h-5 w-5 text-gray-50" />
         </Button>
 
         <div
@@ -149,7 +149,7 @@ export default function AuthForm({ mode }: AuthFormProps) {
         >
           {errorMessage && (
             <>
-              <ExclamationCircleIcon className="h-5 w-5" />
+              <CircleAlert className="h-5 w-5" />
               <p>{errorMessage}</p>
             </>
           )}

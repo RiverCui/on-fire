@@ -1,12 +1,15 @@
 import NavLinks from "./nav-links";
 import { Button } from '@/components/ui/button';
-import { signOut } from '@/auth';
+import { signOut, auth } from '@/auth';
 import { LogOut } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
 
 
 export default async function SideNav() {
 	const t = await getTranslations('DashboardLayout');
+    const session = await auth();
+    const user = session?.user;
+
 	return (
 		<div className="flex h-full flex-col px-3 py-4 md:px-4">
 			<div className="flex grow flex-col justify-between space-y-2">
@@ -23,7 +26,18 @@ export default async function SideNav() {
           </Button>
         </div>
 			</div>
-			<div className="mt-auto pt-4">
+			<div className="mt-auto flex flex-col gap-2 pt-4">
+                {user && (
+                    <div className="flex items-center gap-3 rounded-xl bg-white/5 p-3 backdrop-blur-sm transition-colors hover:bg-white/10">
+                        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-emerald-500/20 text-sm font-bold text-emerald-400 ring-1 ring-emerald-500/50">
+                            {user.name?.[0]?.toUpperCase() || user.email?.[0]?.toUpperCase() || 'U'}
+                        </div>
+                        <div className="flex min-w-0 flex-col">
+                            <p className="truncate text-sm font-medium text-white">{user.name || 'FIRE Master'}</p>
+                            <p className="truncate text-xs text-white/50">{user.email}</p>
+                        </div>
+                    </div>
+                )}
 				<form
 					action={async () => {
 						'use server';

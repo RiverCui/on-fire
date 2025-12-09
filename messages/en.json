@@ -131,5 +131,14 @@
     "description": "Build a private dashboard for assets, cash flow, FIRE simulations, and automation. Your data stays encrypted on servers in your region.",
     "formTitle": "Create a FIRE Master account",
     "formSubtitle": "We’ll tailor the dashboard to your profile once you sign up."
+  },
+  "SettingsPage": {
+    "title": "Settings",
+    "description": "Manage your account and preferences.",
+    "profile": {
+      "title": "Profile",
+      "name": "Name",
+      "email": "Email"
+    }
   }
 }

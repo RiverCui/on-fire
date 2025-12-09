@@ -37,6 +37,7 @@ next-env.d.ts
 
 # AI
 AGENT.md
+GEMINI.md
 
 # Prisma
 /generated/prisma
