@@ -4,6 +4,7 @@ import { AuthError } from 'next-auth';
 import { z } from 'zod';
 import prisma from '@/lib/prisma';
 import bcrypt from 'bcrypt';
+import { isRedirectError } from 'next/dist/client/components/redirect-error';
 
 export async function authenticate(
   prevState: string | undefined,
@@ -63,6 +64,9 @@ export async function register(prevState: string | undefined, formData: FormData
     loginData.append('redirectTo', redirectTo);
     await signIn('credentials', loginData);
   } catch (error) {
+    if (isRedirectError(error)) {
+      throw error;
+    }
     if (error instanceof AuthError) {
       return error.type === 'CredentialsSignin' ? 'Invalid credentials.' : 'Something went wrong.';
     }
