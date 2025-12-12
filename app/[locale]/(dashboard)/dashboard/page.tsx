@@ -1,17 +1,13 @@
 import { ArrowUpRight, PiggyBank, Wallet, Zap } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
 import { auth } from '@/auth';
-import { fetchFirePlan, fetchFireProgress } from '@/lib/data';
+import { fetchDashboardMetrics, fetchFirePlan, fetchRecentCashFlows } from '@/lib/data';
 import AnimatedProgress from '@/components/dashboard/animated-progress';
+import { formatCurrency, formatDateToLocal } from '@/lib/utils';
+import FirePlanTour from '@/components/dashboard/fire-plan-tour';
 
 const glassCard =
   'rounded-3xl border border-white/10 bg-white/5 p-6 text-white shadow-lg backdrop-blur-xl';
-
-const recentFlows = [
-  { labelKey: 'recentFlows.salary.label', amount: '+￥25,000', dateKey: 'recentFlows.salary.date', positive: true },
-  { labelKey: 'recentFlows.investment.label', amount: '-￥5,000', dateKey: 'recentFlows.investment.date', positive: false },
-  { labelKey: 'recentFlows.sideHustle.label', amount: '+￥3,800', dateKey: 'recentFlows.sideHustle.date', positive: true },
-];
 
 export default async function Page() {
   const t = await getTranslations('DashboardPage');
@@ -20,33 +16,42 @@ export default async function Page() {
   if (!userId) {
     return <div>{t('pleaseLogin')}</div>;
   }
-  const { progressValue } = await fetchFireProgress(userId);
+  const [progress, metrics, recentFlows] = await Promise.all([
+    fetchFirePlan(userId),
+    fetchDashboardMetrics(userId),
+    fetchRecentCashFlows(userId, 5),
+  ]);
 
-  const metrics = [
+  console.log('progress', progress);
+
+  const plan = progress.plan;
+
+  const cards = [
     {
       label: t('metrics.netWorth.label'),
-      value: '¥ 1,280,000',
-      change: t('metrics.netWorth.change'),
+      value: formatCurrency(metrics.totalAssets),
+      change: metrics.totalAssets > 0 ? t('metrics.netWorth.change') : t('metrics.noData'),
       icon: Wallet,
     },
     {
       label: t('metrics.savingsRate.label'),
-      value: '52%',
-      change: t('metrics.savingsRate.change'),
+      value: `${metrics.savingsRate}%`,
+      change: metrics.income > 0 ? t('metrics.savingsRate.change') : t('metrics.noData'),
       icon: PiggyBank,
     },
     {
       label: t('metrics.cash.label'),
-      value: '¥ 86,200',
-      change: t('metrics.cash.change'),
+      value: formatCurrency(metrics.cashBalance),
+      change: metrics.cashBalance > 0 ? t('metrics.cash.change') : t('metrics.noData'),
       icon: Zap,
     },
   ];
 
   return (
     <div className="space-y-8">
+      {/* <FirePlanTour show={!plan} /> */}
       <section className="grid gap-6 md:grid-cols-3">
-        {metrics.map((item) => (
+        {cards.map((item) => (
           <div key={item.label} className={`${glassCard} flex flex-col`}>
             <div className="flex items-center justify-between text-white/60">
               <p className="text-sm">{item.label}</p>
@@ -59,29 +64,49 @@ export default async function Page() {
       </section>
 
       <section className="grid gap-6 lg:grid-cols-[1.1fr_0.9fr]">
-        <div className={`${glassCard} space-y-6`}>
+        <div className={`${glassCard} space-y-6`} data-tour="progress-card">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm text-white/60">{t('progressSection.title')}</p>
-              <h3 className="text-2xl font-semibold text-white">{t('progressSection.subtitle')}</h3>
+              <h3 className="text-2xl font-semibold text-white">{progress.planName || t('progressSection.subtitle')}</h3>
             </div>
             <span className="rounded-full bg-white/90 px-3 py-1 text-xs text-slate-900">{t('progressSection.badge')}</span>
           </div>
-          <AnimatedProgress targetValue={progressValue} />
+          <AnimatedProgress targetValue={progress.progressValue} />
           <div className="flex flex-wrap gap-6 text-sm text-white/70">
             <div>
               <p className="text-xs uppercase tracking-wide text-white/50">{t('progressSection.fields.accumulated')}</p>
-              <p className="text-lg font-semibold text-white">¥ 3,400,000</p>
+              <p className="text-lg font-semibold text-white">{formatCurrency(progress.current)}</p>
             </div>
             <div>
               <p className="text-xs uppercase tracking-wide text-white/50">{t('progressSection.fields.target')}</p>
-              <p className="text-lg font-semibold text-white">¥ 5,000,000</p>
+              <p className="text-lg font-semibold text-white">{progress.target > 0 ? formatCurrency(progress.target) : t('progressSection.noTarget')}</p>
             </div>
             <div>
               <p className="text-xs uppercase tracking-wide text-white/50">{t('progressSection.fields.fireDate')}</p>
-              <p className="text-lg font-semibold text-white">2032 · Q1</p>
+              <p className="text-lg font-semibold text-white">{t('progressSection.dynamicProgress', { value: `${progress.percentage}%` })}</p>
             </div>
           </div>
+          {plan && (
+            <div className="grid gap-3 rounded-2xl border border-white/10 bg-white/5 p-4 text-sm text-white/80 md:grid-cols-4">
+              <div>
+                <p className="text-[11px] uppercase tracking-wide text-white/50">{t('progressSection.plan.annualExpense')}</p>
+                <p className="text-sm font-semibold text-white">{formatCurrency(Number(plan.annualExpense))}</p>
+              </div>
+              <div>
+                <p className="text-[11px] uppercase tracking-wide text-white/50">{t('progressSection.plan.withdrawalRate')}</p>
+                <p className="text-sm font-semibold text-white">{(Number(plan.withdrawalRate) * 100).toFixed(1)}%</p>
+              </div>
+              <div>
+                <p className="text-[11px] uppercase tracking-wide text-white/50">{t('progressSection.plan.currentAge')}</p>
+                <p className="text-sm font-semibold text-white">{plan.currentAge}</p>
+              </div>
+              <div>
+                <p className="text-[11px] uppercase tracking-wide text-white/50">{t('progressSection.plan.retirementAge')}</p>
+                <p className="text-sm font-semibold text-white">{plan.retirementAge}</p>
+              </div>
+            </div>
+          )}
         </div>
         <div className={`${glassCard} space-y-6`}>
           <div className="flex items-center justify-between">
@@ -95,13 +120,13 @@ export default async function Page() {
           </div>
           <ul className="space-y-4">
             {recentFlows.map((flow) => (
-              <li key={flow.labelKey} className="flex items-center justify-between rounded-2xl border border-white/10 bg-white/5 px-4 py-3 backdrop-blur">
+              <li key={flow.id} className="flex items-center justify-between rounded-2xl border border-white/10 bg-white/5 px-4 py-3 backdrop-blur">
                 <div>
-                  <p className="font-medium text-white">{t(flow.labelKey)}</p>
-                  <p className="text-xs text-white/50">{t(flow.dateKey)}</p>
+                  <p className="font-medium text-white">{flow.category || flow.note || t('cashflow.untitled')}</p>
+                  <p className="text-xs text-white/50">{formatDateToLocal(flow.recordDate.toString())}</p>
                 </div>
-                <p className={`text-sm font-semibold ${flow.positive ? 'text-emerald-400' : 'text-rose-400'}`}>
-                  {flow.amount}
+                <p className={`text-sm font-semibold ${flow.type === 'INCOME' ? 'text-emerald-400' : 'text-rose-400'}`}>
+                  {`${flow.type === 'INCOME' ? '+' : '-'}${formatCurrency(Number(flow.amount))}`}
                 </p>
               </li>
             ))}

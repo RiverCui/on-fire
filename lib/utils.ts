@@ -6,9 +6,9 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 export const formatCurrency = (amount: number) => {
-  return (amount / 100).toLocaleString('en-US', {
+  return amount.toLocaleString('zh-CN', {
     style: 'currency',
-    currency: 'USD',
+    currency: 'CNY',
   });
 };
 

@@ -48,7 +48,11 @@ export default async function Layout({ children }: DashboardLayoutProps) {
                 <Bell className="h-4 w-4" />
                 {t('notificationsButton')}
               </Button>
-              <Button size="sm" className="bg-white/90 text-slate-900 hover:bg-white">
+              <Button
+                size="sm"
+                className="bg-white/90 text-slate-900 hover:bg-white"
+                data-tour="new-plan-button"
+              >
                 <Sparkles className="h-4 w-4" />
                 {t('newPlanButton')}
               </Button>

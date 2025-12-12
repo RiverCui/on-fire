@@ -69,7 +69,8 @@
       "cash": {
         "label": "可支配现金",
         "change": "稳定"
-      }
+      },
+      "noData": "暂无数据"
     },
     "progressSection": {
       "title": "FIRE 进度",
@@ -79,12 +80,21 @@
         "accumulated": "已积累",
         "target": "目标",
         "fireDate": "预测自由日"
+      },
+      "noTarget": "暂无目标",
+      "dynamicProgress": "当前进度 {value}",
+      "plan": {
+        "annualExpense": "退休年支出",
+        "withdrawalRate": "提款率",
+        "currentAge": "当前年龄",
+        "retirementAge": "计划退休年龄"
       }
     },
     "cashflow": {
       "title": "现金流动态",
       "subtitle": "最近 7 日",
-      "button": "查看全部"
+      "button": "查看全部",
+      "untitled": "未分类"
     },
     "recentFlows": {
       "salary": {
@@ -116,6 +126,16 @@
       "title": "更新 12 月收入与 ETF 定投计划",
       "description": "本月支出已控制在预算范围。建议保持 50% 以上储蓄率，并将新增资金投入多资产组合。",
       "button": "去记录"
+    },
+    "tour": {
+      "progress": {
+        "title": "查看你的 FIRE 进度",
+        "desc": "这里展示当前资产与目标的对比。先创建计划，才能算出目标与进度。"
+      },
+      "planButton": {
+        "title": "创建你的第一个计划",
+        "desc": "点击这里填写提款率、年度支出与目标金额，然后左侧会显示进度。"
+      }
     }
   },
   "AuthLoginPage": {

@@ -69,7 +69,8 @@
       "cash": {
         "label": "Cash on hand",
         "change": "Stable"
-      }
+      },
+      "noData": "No recent data"
     },
     "progressSection": {
       "title": "FIRE progress",
@@ -79,12 +80,21 @@
         "accumulated": "Accumulated",
         "target": "Target",
         "fireDate": "Projected FIRE date"
+      },
+      "noTarget": "No target set",
+      "dynamicProgress": "Progress {value}",
+      "plan": {
+        "annualExpense": "Annual expense",
+        "withdrawalRate": "Withdrawal rate",
+        "currentAge": "Current age",
+        "retirementAge": "Retire at"
       }
     },
     "cashflow": {
       "title": "Cash flow updates",
       "subtitle": "Last 7 days",
-      "button": "View all"
+      "button": "View all",
+      "untitled": "Uncategorized"
     },
     "recentFlows": {
       "salary": {
@@ -116,6 +126,16 @@
       "title": "Update December income and ETF DCA plan",
       "description": "Spending is on budget this month. Keep savings above 50% and deploy new funds into the diversified portfolio.",
       "button": "Log it"
+    },
+    "tour": {
+      "progress": {
+        "title": "Track your FIRE plan",
+        "desc": "This card shows your current assets versus target. Add a plan to compute the target and progress."
+      },
+      "planButton": {
+        "title": "Create your first plan",
+        "desc": "Click here to set withdrawal rate, annual expense, and target. We’ll then show progress on the left."
+      }
     }
   },
   "AuthLoginPage": {

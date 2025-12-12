@@ -1,24 +1,11 @@
 import prisma from '@/lib/prisma'
 import { Prisma } from '@/generated/prisma/client';
-
-// Fetch FIRE plan data for a specific user
-export async function fetchFirePlan(userId: string) {
-  try {
-    const plans = await prisma.firePlan.findMany({
-      where: { userId },
-      orderBy: { createdAt: 'desc' },
-    });
-    return plans;
-  } catch (error) {
-    console.log('Failed to fetch FIRE plans:', error);
-    return null;
-  }
-}
+import { FlowType } from '@/generated/prisma/client';
 
 // Fetch FIRE progress data for a specific user
 // calculate with Decimal for precision, then convert to number for frontend use
 // Decimal.js: https://mikemcl.github.io/decimal.js/
-export async function fetchFireProgress(userId: string) {
+export async function fetchFirePlan(userId: string) {
   const [assetAggregation, firePlan] = await Promise.all([
     // aggregate assets to calculate total value
     prisma.assetAccount.aggregate({
@@ -63,5 +50,58 @@ export async function fetchFireProgress(userId: string) {
     percentage: percentageNumber,
     progressValue: Math.max(0, percentageNumber), // ensure non-negative for progress bar
     planName,
+    plan: firePlan,
   }
+}
+
+// Dashboard overview metrics (assets + recent cash flows)
+export async function fetchDashboardMetrics(userId: string) {
+  const thirtyDaysAgo = new Date();
+  thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+
+  const [assetAggregation, cashAggregation, incomeAgg, expenseAgg] = await Promise.all([
+    prisma.assetAccount.aggregate({
+      where: { userId },
+      _sum: { currentBalance: true },
+    }),
+    prisma.assetAccount.aggregate({
+      where: { userId, type: 'CASH' },
+      _sum: { currentBalance: true },
+    }),
+    prisma.cashFlowRecord.aggregate({
+      where: { userId, type: FlowType.INCOME, recordDate: { gte: thirtyDaysAgo } },
+      _sum: { amount: true },
+    }),
+    prisma.cashFlowRecord.aggregate({
+      where: { userId, type: FlowType.EXPENSE, recordDate: { gte: thirtyDaysAgo } },
+      _sum: { amount: true },
+    }),
+  ]);
+
+  const totalAssets = assetAggregation._sum.currentBalance || new Prisma.Decimal(0);
+  const cashBalance = cashAggregation._sum.currentBalance || new Prisma.Decimal(0);
+  const income = incomeAgg._sum.amount || new Prisma.Decimal(0);
+  const expense = expenseAgg._sum.amount || new Prisma.Decimal(0);
+
+  let savingsRate = 0;
+  if (!income.isZero()) {
+    savingsRate = income.minus(expense).div(income).mul(100).toDecimalPlaces(1).toNumber();
+  }
+
+  return {
+    totalAssets: totalAssets.toNumber(),
+    cashBalance: cashBalance.toNumber(),
+    income: income.toNumber(),
+    expense: expense.toNumber(),
+    savingsRate: Math.max(-999, Math.min(999, savingsRate)), // clamp for display
+  };
+}
+
+export async function fetchRecentCashFlows(userId: string, take = 5) {
+  const flows = await prisma.cashFlowRecord.findMany({
+    where: { userId },
+    orderBy: { recordDate: 'desc' },
+    take,
+  });
+  return flows;
 }
