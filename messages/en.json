@@ -143,6 +143,22 @@
         "title": "Create your first plan",
         "desc": "Click here to set withdrawal rate, annual expense, and target. We’ll then show progress on the left."
       }
+    },
+    "simulator": {
+      "title": "FIRE Simulator",
+      "subtitle": "Adjust parameters to project your wealth trajectory",
+      "initialAssets": "Initial Assets",
+      "annualExpense": "Annual Expense",
+      "expectedReturn": "Expected Return",
+      "inflationRate": "Inflation Rate",
+      "withdrawalRate": "Withdrawal Rate",
+      "currentAge": "Current Age",
+      "retirementAge": "Retirement Age",
+      "fireTarget": "FIRE Target",
+      "retirement": "Retirement",
+      "unitWan": "万",
+      "unitPercent": "%",
+      "unitAge": "yrs"
     }
   },
   "AuthLoginPage": {

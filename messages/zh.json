@@ -143,6 +143,22 @@
         "title": "创建你的第一个计划",
         "desc": "点击这里填写提款率、年度支出与目标金额，然后左侧会显示进度。"
       }
+    },
+    "simulator": {
+      "title": "FIRE 模拟器",
+      "subtitle": "调整参数，预测你的财富曲线",
+      "initialAssets": "初始资产",
+      "annualExpense": "年支出",
+      "expectedReturn": "预期收益率",
+      "inflationRate": "通胀率",
+      "withdrawalRate": "提款率",
+      "currentAge": "当前年龄",
+      "retirementAge": "退休年龄",
+      "fireTarget": "FIRE 目标",
+      "retirement": "退休",
+      "unitWan": "万",
+      "unitPercent": "%",
+      "unitAge": "岁"
     }
   },
   "AuthLoginPage": {
