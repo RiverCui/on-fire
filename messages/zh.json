@@ -148,7 +148,7 @@
       "title": "FIRE 模拟器",
       "subtitle": "调整参数，预测你的财富曲线",
       "initialAssets": "初始资产",
-      "annualExpense": "年支出",
+      "annualSavings": "年储蓄",
       "expectedReturn": "预期收益率",
       "inflationRate": "通胀率",
       "withdrawalRate": "提款率",

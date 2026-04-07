@@ -1,6 +1,6 @@
 export type FireParams = {
   initialAssets: number;
-  annualExpense: number;
+  annualSavings: number;
   expectedReturn: number;  // e.g. 0.07 for 7%
   inflationRate: number;   // e.g. 0.03 for 3%
   withdrawalRate: number;  // e.g. 0.04 for 4%
@@ -18,7 +18,7 @@ const END_AGE = 90;
 export function calculateFireCurve(params: FireParams): FireDataPoint[] {
   const {
     initialAssets,
-    annualExpense,
+    annualSavings,
     expectedReturn,
     inflationRate,
     withdrawalRate,
@@ -33,24 +33,22 @@ export function calculateFireCurve(params: FireParams): FireDataPoint[] {
     result.push({ age, assets: Math.round(assets) });
 
     if (age < retirementAge) {
-      // Accumulation phase: grow assets, subtract inflation-adjusted expenses
+      // Accumulation phase: grow assets by returns, add inflation-adjusted savings
       const yearIndex = age - currentAge;
-      const adjustedExpense = annualExpense * Math.pow(1 + inflationRate, yearIndex);
-      assets = assets * (1 + expectedReturn) - adjustedExpense;
+      const adjustedSavings = annualSavings * Math.pow(1 + inflationRate, yearIndex);
+      assets = assets * (1 + expectedReturn) + adjustedSavings;
     } else {
       // Withdrawal phase: grow assets, subtract withdrawal amount
-      assets = assets * (1 + expectedReturn) - assets * withdrawalRate;
-    }
-
-    if (assets < 0) {
-      assets = 0;
+      const withdrawalAmount = assets * withdrawalRate;
+      assets = assets * (1 + expectedReturn) - withdrawalAmount;
     }
   }
 
   return result;
 }
 
-export function calculateFireTarget(annualExpense: number, withdrawalRate: number): number {
+export function calculateFireTarget(annualSavings: number, withdrawalRate: number): number {
   if (withdrawalRate === 0) return 0;
-  return Math.round(annualExpense / withdrawalRate);
+  // FIRE target: annual expense in retirement ≈ annual savings (lifestyle maintained)
+  return Math.round(annualSavings / withdrawalRate);
 }

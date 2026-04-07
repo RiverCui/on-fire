@@ -17,7 +17,7 @@ import { calculateFireCurve, calculateFireTarget } from '@/lib/fire-calc';
 import type { FireParams } from '@/lib/fire-calc';
 
 type FirePlanData = {
-  annualExpense?: number;
+  annualSavings?: number;
   expectedReturn?: number;
   inflationRate?: number;
   withdrawalRate?: number;
@@ -43,7 +43,7 @@ export default function FireSimulator({ currentAssets, firePlan }: FireSimulator
 
   const [params, setParams] = useState<FireParams>({
     initialAssets: currentAssets || 500000,
-    annualExpense: firePlan?.annualExpense ?? 200000,
+    annualSavings: firePlan?.annualSavings ?? 200000,
     expectedReturn: firePlan?.expectedReturn ?? 0.07,
     inflationRate: firePlan?.inflationRate ?? 0.03,
     withdrawalRate: firePlan?.withdrawalRate ?? 0.04,
@@ -53,8 +53,8 @@ export default function FireSimulator({ currentAssets, firePlan }: FireSimulator
 
   const data = useMemo(() => calculateFireCurve(params), [params]);
   const fireTarget = useMemo(
-    () => calculateFireTarget(params.annualExpense, params.withdrawalRate),
-    [params.annualExpense, params.withdrawalRate],
+    () => calculateFireTarget(params.annualSavings, params.withdrawalRate),
+    [params.annualSavings, params.withdrawalRate],
   );
 
   const formatWan = (v: number) => `${(v / 10000).toFixed(0)}${t('unitWan')}`;
@@ -63,7 +63,7 @@ export default function FireSimulator({ currentAssets, firePlan }: FireSimulator
 
   const sliders: SliderConfig[] = [
     { key: 'initialAssets', min: -5000000, max: 10000000, step: 100000, format: formatWan },
-    { key: 'annualExpense', min: 10000, max: 1000000, step: 10000, format: formatWan },
+    { key: 'annualSavings', min: 10000, max: 1000000, step: 10000, format: formatWan },
     { key: 'expectedReturn', min: 0, max: 0.15, step: 0.005, format: formatPercent },
     { key: 'inflationRate', min: 0, max: 0.10, step: 0.005, format: formatPercent },
     { key: 'withdrawalRate', min: 0.02, max: 0.06, step: 0.001, format: formatPercent },

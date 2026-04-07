@@ -148,7 +148,7 @@
       "title": "FIRE Simulator",
       "subtitle": "Adjust parameters to project your wealth trajectory",
       "initialAssets": "Initial Assets",
-      "annualExpense": "Annual Expense",
+      "annualSavings": "Annual Savings",
       "expectedReturn": "Expected Return",
       "inflationRate": "Inflation Rate",
       "withdrawalRate": "Withdrawal Rate",

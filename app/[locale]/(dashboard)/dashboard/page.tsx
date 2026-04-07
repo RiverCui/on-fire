@@ -63,7 +63,7 @@ export default async function Page() {
         <FireSimulator
           currentAssets={metrics.totalAssets}
           firePlan={plan ? {
-            annualExpense: Number(plan.annualExpense),
+            annualSavings: Number(plan.annualExpense),
             expectedReturn: Number(plan.expectedReturn),
             inflationRate: Number(plan.inflationRate),
             withdrawalRate: Number(plan.withdrawalRate),
