@@ -62,7 +62,7 @@ export default function FireSimulator({ currentAssets, firePlan }: FireSimulator
   const formatAge = (v: number) => `${v}${t('unitAge')}`;
 
   const sliders: SliderConfig[] = [
-    { key: 'initialAssets', min: 0, max: 10000000, step: 100000, format: formatWan },
+    { key: 'initialAssets', min: -5000000, max: 10000000, step: 100000, format: formatWan },
     { key: 'annualExpense', min: 10000, max: 1000000, step: 10000, format: formatWan },
     { key: 'expectedReturn', min: 0, max: 0.15, step: 0.005, format: formatPercent },
     { key: 'inflationRate', min: 0, max: 0.10, step: 0.005, format: formatPercent },
