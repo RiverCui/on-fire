@@ -97,6 +97,15 @@ export async function fetchDashboardMetrics(userId: string) {
   };
 }
 
+// Fetch all asset accounts for a user
+export async function fetchAssetAccounts(userId: string) {
+  const accounts = await prisma.assetAccount.findMany({
+    where: { userId },
+    orderBy: { updatedAt: 'desc' },
+  });
+  return accounts;
+}
+
 export async function fetchRecentCashFlows(userId: string, take = 5) {
   const flows = await prisma.cashFlowRecord.findMany({
     where: { userId },
@@ -104,4 +113,95 @@ export async function fetchRecentCashFlows(userId: string, take = 5) {
     take,
   });
   return flows;
+}
+
+// Fetch cash flow records with optional month filter (e.g. "2026-04")
+export async function fetchCashFlows(userId: string, month?: string) {
+  const where: { userId: string; recordDate?: { gte: Date; lt: Date } } = { userId };
+
+  if (month) {
+    const [year, m] = month.split('-').map(Number);
+    const start = new Date(year, m - 1, 1);
+    const end = new Date(year, m, 1);
+    where.recordDate = { gte: start, lt: end };
+  }
+
+  return prisma.cashFlowRecord.findMany({
+    where,
+    orderBy: { recordDate: 'desc' },
+  });
+}
+
+// Monthly summary: total income, total expense, net flow
+export async function fetchCashFlowSummary(userId: string, month: string) {
+  const [year, m] = month.split('-').map(Number);
+  const start = new Date(year, m - 1, 1);
+  const end = new Date(year, m, 1);
+
+  const [incomeAgg, expenseAgg] = await Promise.all([
+    prisma.cashFlowRecord.aggregate({
+      where: { userId, type: FlowType.INCOME, recordDate: { gte: start, lt: end } },
+      _sum: { amount: true },
+    }),
+    prisma.cashFlowRecord.aggregate({
+      where: { userId, type: FlowType.EXPENSE, recordDate: { gte: start, lt: end } },
+      _sum: { amount: true },
+    }),
+  ]);
+
+  const income = incomeAgg._sum.amount ? Number(incomeAgg._sum.amount) : 0;
+  const expense = expenseAgg._sum.amount ? Number(expenseAgg._sum.amount) : 0;
+
+  return { income, expense, net: income - expense };
+}
+
+// Monthly cash flow trend for the last N months (for bar chart)
+export async function fetchMonthlyCashFlowTrend(userId: string, months = 6) {
+  const now = new Date();
+  const start = new Date(now.getFullYear(), now.getMonth() - months + 1, 1);
+
+  const records = await prisma.cashFlowRecord.findMany({
+    where: { userId, recordDate: { gte: start } },
+    select: { recordDate: true, type: true, amount: true },
+  });
+
+  // Build month buckets
+  const result: { month: string; income: number; expense: number }[] = [];
+  for (let i = 0; i < months; i++) {
+    const d = new Date(now.getFullYear(), now.getMonth() - months + 1 + i, 1);
+    result.push({
+      month: `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`,
+      income: 0,
+      expense: 0,
+    });
+  }
+
+  for (const r of records) {
+    const key = `${r.recordDate.getFullYear()}-${String(r.recordDate.getMonth() + 1).padStart(2, '0')}`;
+    const bucket = result.find((b) => b.month === key);
+    if (bucket) {
+      const amt = Number(r.amount);
+      if (r.type === FlowType.INCOME) bucket.income += amt;
+      else bucket.expense += amt;
+    }
+  }
+
+  return result;
+}
+
+// Asset distribution grouped by AssetType (for pie chart)
+export async function fetchAssetDistribution(userId: string) {
+  const accounts = await prisma.assetAccount.groupBy({
+    by: ['type'],
+    where: { userId },
+    _sum: { currentBalance: true },
+  });
+
+  return accounts
+    .map((g) => ({
+      type: g.type,
+      value: g._sum.currentBalance ? Number(g._sum.currentBalance) : 0,
+    }))
+    .filter((g) => g.value > 0)
+    .sort((a, b) => b.value - a.value);
 }

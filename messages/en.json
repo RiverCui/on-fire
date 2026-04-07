@@ -110,6 +110,13 @@
         "date": "Nov 24"
       }
     },
+    "trend": {
+      "title": "Cash Flow Trend",
+      "subtitle": "Last 6 months",
+      "income": "Income",
+      "expense": "Expense",
+      "noData": "No cash flow data yet"
+    },
     "allocation": {
       "title": "Asset allocation",
       "subtitle": "Multi-account, multi-currency",
@@ -151,6 +158,114 @@
     "description": "Build a private dashboard for assets, cash flow, FIRE simulations, and automation. Your data stays encrypted on servers in your region.",
     "formTitle": "Create a FIRE Master account",
     "formSubtitle": "We’ll tailor the dashboard to your profile once you sign up."
+  },
+  "AccountPage": {
+    "title": "Asset Accounts",
+    "description": "Manage all your asset accounts.",
+    "addButton": "Add Account",
+    "editButton": "Edit",
+    "deleteButton": "Delete",
+    "deleteConfirm": "Are you sure you want to delete this account? This action cannot be undone.",
+    "emptyState": "No asset accounts yet. Click the button above to create your first one.",
+    "table": {
+      "name": "Account Name",
+      "type": "Type",
+      "currency": "Currency",
+      "balance": "Current Balance",
+      "updatedAt": "Updated",
+      "actions": "Actions"
+    },
+    "form": {
+      "createTitle": "Create Asset Account",
+      "editTitle": "Edit Asset Account",
+      "name": "Account Name",
+      "namePlaceholder": "e.g., Chase Savings Account",
+      "type": "Account Type",
+      "typePlaceholder": "Select account type",
+      "currency": "Currency",
+      "balance": "Current Balance",
+      "balancePlaceholder": "0.00",
+      "submitCreate": "Create",
+      "submitEdit": "Save Changes",
+      "cancel": "Cancel",
+      "submitting": "Submitting..."
+    },
+    "types": {
+      "CASH": "Cash",
+      "STOCK": "Stocks",
+      "BOND": "Bonds",
+      "REAL_ESTATE": "Real Estate",
+      "CRYPTO": "Crypto",
+      "DEBT": "Debt",
+      "OTHER": "Other"
+    },
+    "toast": {
+      "createSuccess": "Account created successfully",
+      "editSuccess": "Account updated successfully",
+      "deleteSuccess": "Account deleted"
+    }
+  },
+  "CashflowPage": {
+    "title": "Cash Flow",
+    "description": "Track and manage your income and expenses.",
+    "addButton": "Add Record",
+    "editButton": "Edit",
+    "deleteButton": "Delete",
+    "deleteConfirm": "Are you sure you want to delete this record?",
+    "emptyState": "No records yet. Click the button above to log your first entry.",
+    "filterAll": "All",
+    "filterIncome": "Income",
+    "filterExpense": "Expense",
+    "table": {
+      "date": "Date",
+      "type": "Type",
+      "category": "Category",
+      "amount": "Amount",
+      "note": "Note",
+      "actions": "Actions"
+    },
+    "form": {
+      "createTitle": "Log Cash Flow",
+      "editTitle": "Edit Record",
+      "date": "Date",
+      "type": "Type",
+      "typeIncome": "Income",
+      "typeExpense": "Expense",
+      "amount": "Amount",
+      "amountPlaceholder": "0.00",
+      "category": "Category",
+      "categoryPlaceholder": "e.g., Salary, Dining, Transport",
+      "note": "Note",
+      "notePlaceholder": "Optional note",
+      "submitCreate": "Log It",
+      "submitEdit": "Save Changes",
+      "cancel": "Cancel",
+      "submitting": "Submitting..."
+    },
+    "categories": {
+      "salary": "Salary",
+      "bonus": "Bonus",
+      "investment": "Investment Returns",
+      "sideHustle": "Side Hustle",
+      "food": "Dining",
+      "transport": "Transport",
+      "housing": "Housing",
+      "shopping": "Shopping",
+      "entertainment": "Entertainment",
+      "medical": "Medical",
+      "education": "Education",
+      "other": "Other"
+    },
+    "summary": {
+      "totalIncome": "Monthly Income",
+      "totalExpense": "Monthly Expense",
+      "netFlow": "Net Cash Flow"
+    },
+    "toast": {
+      "createSuccess": "Record added successfully",
+      "editSuccess": "Record updated successfully",
+      "deleteSuccess": "Record deleted"
+    }
   },
   "SettingsPage": {
     "title": "Settings",

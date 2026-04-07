@@ -46,8 +46,8 @@ export default function NavLinks() {
 						className={cn(
 							"flex items-center gap-3 rounded-lg px-3 py-2.5 transition-all",
 							isActive
-								? "bg-white/15 text-white font-medium backdrop-blur"
-								: "text-white/60 hover:bg-white/10 hover:text-white"
+								? "bg-slate-200 text-slate-900 font-medium backdrop-blur dark:bg-white/15 dark:text-white"
+								: "text-slate-600 hover:bg-slate-100 hover:text-slate-900 dark:text-white/60 dark:hover:bg-white/10 dark:hover:text-white"
 						)}
 					>
 						<LinkIcon className="h-5 w-5" />

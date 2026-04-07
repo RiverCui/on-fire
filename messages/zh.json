@@ -110,6 +110,13 @@
         "date": "11月 24日"
       }
     },
+    "trend": {
+      "title": "收支趋势",
+      "subtitle": "近 6 个月",
+      "income": "收入",
+      "expense": "支出",
+      "noData": "暂无收支数据"
+    },
     "allocation": {
       "title": "资产配置",
       "subtitle": "多账户，多币种",
@@ -151,6 +158,114 @@
     "description": "创建一个私密空间，用于管理资产、现金流、退休模拟与自动化提醒。所有数据都会在你的区域内加密存储。",
     "formTitle": "创建 FIRE Master 账户",
     "formSubtitle": "注册后我们会根据你的资料定制仪表盘体验。"
+  },
+  "AccountPage": {
+    "title": "资产账户",
+    "description": "管理你的所有资产账户。",
+    "addButton": "添加账户",
+    "editButton": "编辑",
+    "deleteButton": "删除",
+    "deleteConfirm": "确定删除该账户？删除后无法恢复。",
+    "emptyState": "暂无资产账户，点击上方按钮创建第一个。",
+    "table": {
+      "name": "账户名称",
+      "type": "类型",
+      "currency": "币种",
+      "balance": "当前余额",
+      "updatedAt": "更新时间",
+      "actions": "操作"
+    },
+    "form": {
+      "createTitle": "创建资产账户",
+      "editTitle": "编辑资产账户",
+      "name": "账户名称",
+      "namePlaceholder": "例如：招商银行储蓄卡",
+      "type": "账户类型",
+      "typePlaceholder": "选择账户类型",
+      "currency": "币种",
+      "balance": "当前余额",
+      "balancePlaceholder": "0.00",
+      "submitCreate": "创建",
+      "submitEdit": "保存修改",
+      "cancel": "取消",
+      "submitting": "提交中..."
+    },
+    "types": {
+      "CASH": "现金",
+      "STOCK": "股票",
+      "BOND": "债券",
+      "REAL_ESTATE": "房产",
+      "CRYPTO": "加密货币",
+      "DEBT": "负债",
+      "OTHER": "其他"
+    },
+    "toast": {
+      "createSuccess": "账户创建成功",
+      "editSuccess": "账户更新成功",
+      "deleteSuccess": "账户已删除"
+    }
+  },
+  "CashflowPage": {
+    "title": "现金流",
+    "description": "记录和管理你的收支明细。",
+    "addButton": "记一笔",
+    "editButton": "编辑",
+    "deleteButton": "删除",
+    "deleteConfirm": "确定删除该记录？",
+    "emptyState": "暂无收支记录，点击上方按钮记录第一笔。",
+    "filterAll": "全部",
+    "filterIncome": "收入",
+    "filterExpense": "支出",
+    "table": {
+      "date": "日期",
+      "type": "类型",
+      "category": "分类",
+      "amount": "金额",
+      "note": "备注",
+      "actions": "操作"
+    },
+    "form": {
+      "createTitle": "记录收支",
+      "editTitle": "编辑记录",
+      "date": "日期",
+      "type": "类型",
+      "typeIncome": "收入",
+      "typeExpense": "支出",
+      "amount": "金额",
+      "amountPlaceholder": "0.00",
+      "category": "分类",
+      "categoryPlaceholder": "例如：工资、餐饮、交通",
+      "note": "备注",
+      "notePlaceholder": "可选备注",
+      "submitCreate": "记录",
+      "submitEdit": "保存修改",
+      "cancel": "取消",
+      "submitting": "提交中..."
+    },
+    "categories": {
+      "salary": "工资",
+      "bonus": "奖金",
+      "investment": "投资收益",
+      "sideHustle": "副业",
+      "food": "餐饮",
+      "transport": "交通",
+      "housing": "住房",
+      "shopping": "购物",
+      "entertainment": "娱乐",
+      "medical": "医疗",
+      "education": "教育",
+      "other": "其他"
+    },
+    "summary": {
+      "totalIncome": "本月收入",
+      "totalExpense": "本月支出",
+      "netFlow": "净现金流"
+    },
+    "toast": {
+      "createSuccess": "记录添加成功",
+      "editSuccess": "记录更新成功",
+      "deleteSuccess": "记录已删除"
+    }
   },
   "SettingsPage": {
     "title": "设置",

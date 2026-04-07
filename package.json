@@ -44,6 +44,9 @@
     "prisma": "^7.0.1",
     "tsx": "^4.20.6"
   },
+  "prisma": {
+    "seed": "tsx prisma/seed.ts"
+  },
   "pnpm": {
     "onlyBuiltDependencies": [
       "bcrypt",
