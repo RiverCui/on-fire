@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect } from 'react';
-import { driver } from 'driver.js';
+import { driver, type DriveStep } from 'driver.js';
 import 'driver.js/dist/driver.css';
 import { useTranslations } from 'next-intl';
 
@@ -15,14 +15,14 @@ export default function FirePlanTour({ show }: FirePlanTourProps) {
   useEffect(() => {
     if (!show) return;
 
-    const steps = [
+    const steps: DriveStep[] = [
       {
         element: '[data-tour="progress-card"]',
         popover: {
           title: t('tour.progress.title'),
           description: t('tour.progress.desc'),
-          side: 'bottom',
-          align: 'start',
+          side: 'bottom' as const,
+          align: 'start' as const,
         },
       },
       {
@@ -30,11 +30,11 @@ export default function FirePlanTour({ show }: FirePlanTourProps) {
         popover: {
           title: t('tour.planButton.title'),
           description: t('tour.planButton.desc'),
-          side: 'bottom',
-          align: 'start',
+          side: 'bottom' as const,
+          align: 'start' as const,
         },
       },
-    ].filter((step) => document.querySelector(step.element));
+    ].filter((step) => document.querySelector(step.element as string));
 
     if (!steps.length) return;
 

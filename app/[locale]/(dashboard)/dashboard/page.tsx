@@ -1,10 +1,11 @@
 import { ArrowUpRight, PiggyBank, Wallet, Zap } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
 import { auth } from '@/auth';
-import { fetchAssetDistribution, fetchDashboardMetrics, fetchFirePlan, fetchMonthlyCashFlowTrend, fetchRecentCashFlows } from '@/lib/data';
+import { /* fetchAssetDistribution, */ fetchDashboardMetrics, fetchFirePlan, /* fetchMonthlyCashFlowTrend, */ fetchRecentCashFlows } from '@/lib/data';
 import AnimatedProgress from '@/components/dashboard/animated-progress';
-import AssetPieChart from '@/components/dashboard/charts/asset-pie-chart';
-import CashFlowBarChart from '@/components/dashboard/charts/cashflow-bar-chart';
+// import AssetPieChart from '@/components/dashboard/charts/asset-pie-chart';
+// import CashFlowBarChart from '@/components/dashboard/charts/cashflow-bar-chart';
+import FireSimulator from '@/components/dashboard/fire-simulator';
 import { formatCurrency, formatDateToLocal } from '@/lib/utils';
 import FirePlanTour from '@/components/dashboard/fire-plan-tour';
 
@@ -18,12 +19,12 @@ export default async function Page() {
   if (!userId) {
     return <div>{t('pleaseLogin')}</div>;
   }
-  const [progress, metrics, recentFlows, assetDist, cashFlowTrend] = await Promise.all([
+  const [progress, metrics, recentFlows] = await Promise.all([
     fetchFirePlan(userId),
     fetchDashboardMetrics(userId),
     fetchRecentCashFlows(userId, 5),
-    fetchAssetDistribution(userId),
-    fetchMonthlyCashFlowTrend(userId, 6),
+    // fetchAssetDistribution(userId),
+    // fetchMonthlyCashFlowTrend(userId, 6),
   ]);
 
   const plan = progress.plan;
@@ -52,6 +53,26 @@ export default async function Page() {
   return (
     <div className="space-y-8">
       {/* <FirePlanTour show={!plan} /> */}
+
+      {/* FIRE Simulator */}
+      <section className={glassCard}>
+        <div className="mb-4">
+          <p className="text-sm text-slate-500 dark:text-white/60">{t('simulator.title')}</p>
+          <h3 className="text-xl font-semibold text-slate-900 dark:text-white">{t('simulator.subtitle')}</h3>
+        </div>
+        <FireSimulator
+          currentAssets={metrics.totalAssets}
+          firePlan={plan ? {
+            annualExpense: Number(plan.annualExpense),
+            expectedReturn: Number(plan.expectedReturn),
+            inflationRate: Number(plan.inflationRate),
+            withdrawalRate: Number(plan.withdrawalRate),
+            currentAge: plan.currentAge,
+            retirementAge: plan.retirementAge,
+          } : null}
+        />
+      </section>
+
       <section className="grid gap-6 md:grid-cols-3">
         {cards.map((item) => (
           <div key={item.label} className={`${glassCard} flex flex-col`}>
@@ -136,8 +157,8 @@ export default async function Page() {
         </div>
       </section>
 
+      {/* C Section: Charts (temporarily hidden)
       <section className="grid gap-6 lg:grid-cols-[1.2fr_0.8fr]">
-        {/* Cash Flow Trend */}
         <div className={`${glassCard}`}>
           <div className="mb-4">
             <p className="text-sm text-slate-500 dark:text-white/60">{t('trend.title')}</p>
@@ -145,8 +166,6 @@ export default async function Page() {
           </div>
           <CashFlowBarChart data={cashFlowTrend} />
         </div>
-
-        {/* Asset Distribution */}
         <div className={`${glassCard}`}>
           <div className="mb-4">
             <p className="text-sm text-slate-500 dark:text-white/60">{t('allocation.title')}</p>
@@ -155,6 +174,7 @@ export default async function Page() {
           <AssetPieChart data={assetDist} />
         </div>
       </section>
+      */}
     </div>
   );
 }
