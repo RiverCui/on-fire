@@ -1,6 +1,7 @@
 export type FireParams = {
   initialAssets: number;
   annualSavings: number;
+  annualExpense: number;   // retirement annual expense for FIRE target
   expectedReturn: number;  // e.g. 0.07 for 7%
   inflationRate: number;   // e.g. 0.03 for 3%
   withdrawalRate: number;  // e.g. 0.04 for 4%
@@ -47,8 +48,8 @@ export function calculateFireCurve(params: FireParams): FireDataPoint[] {
   return result;
 }
 
-export function calculateFireTarget(annualSavings: number, withdrawalRate: number): number {
+export function calculateFireTarget(annualExpense: number, withdrawalRate: number): number {
   if (withdrawalRate === 0) return 0;
-  // FIRE target: annual expense in retirement ≈ annual savings (lifestyle maintained)
-  return Math.round(annualSavings / withdrawalRate);
+  // Classic FIRE formula: target = annual retirement expense / withdrawal rate
+  return Math.round(annualExpense / withdrawalRate);
 }

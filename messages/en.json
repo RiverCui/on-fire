@@ -149,6 +149,7 @@
       "subtitle": "Adjust parameters to project your wealth trajectory",
       "initialAssets": "Initial Assets",
       "annualSavings": "Annual Savings",
+      "annualExpense": "Annual Expense",
       "expectedReturn": "Expected Return",
       "inflationRate": "Inflation Rate",
       "withdrawalRate": "Withdrawal Rate",
