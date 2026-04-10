@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import NavLinks from "./nav-links";
 import { Button } from '@/components/ui/button';
 import { signOut, auth } from '@/auth';
@@ -21,8 +22,9 @@ export default async function SideNav() {
             variant="secondary"
             size="sm"
             className="mt-4 w-full bg-slate-900 text-white hover:bg-slate-800 dark:bg-white/90 dark:text-slate-900 dark:hover:bg-white"
+            asChild
           >
-            {t('dailyMetricsButton')}
+            <Link href="/dashboard/cashflow">{t('dailyMetricsButton')}</Link>
           </Button>
         </div>
       </div>
@@ -33,7 +35,7 @@ export default async function SideNav() {
                             {user.name?.[0]?.toUpperCase() || user.email?.[0]?.toUpperCase() || 'U'}
                         </div>
                         <div className="flex min-w-0 flex-col">
-                            <p className="truncate text-sm font-medium text-slate-900 dark:text-white">{user.name || 'FIRE Master'}</p>
+                            <p className="truncate text-sm font-medium text-slate-900 dark:text-white">{user.name || 'CompIsle'}</p>
                             <p className="truncate text-xs text-slate-600 dark:text-white/50">{user.email}</p>
                         </div>
                     </div>

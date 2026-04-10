@@ -6,8 +6,8 @@
     "settings": "设置"
   },
   "LocaleLayout": {
-    "title": "FIRE 控制台",
-    "description": "FIRE 控制台概览"
+    "title": "复利岛 Dashboard",
+    "description": "复利岛 Dashboard Overview"
   },
   "AuthForm": {
     "titles": {
@@ -43,14 +43,15 @@
     }
   },
   "DashboardLayout": {
-    "brandName": "FIRE Master",
+    "brandName": "复利岛",
+    "brandSubtitle": "CompIsle",
     "brandTagline": "掌控资产 · 量化自由",
     "dailyMetricsTitle": "今日 FIRE 指标",
     "dailyMetricsSubtitle": "记录今日储蓄率，保持复利节奏。",
     "dailyMetricsButton": "快速记一笔",
-    "welcomeBack": "欢迎回来",
-    "dashboardTitle": "你的 FIRE 仪表盘",
-    "dashboardSubtitle": "每一次记录都是向自由迈进的一步，今天也保持 50% 的储蓄率吧。",
+    "welcomeBack": "",
+    "dashboardTitle": "总览",
+    "dashboardSubtitle": "",
     "notificationsButton": "通知",
     "newPlanButton": "新建计划",
     "language": "语言"
@@ -148,32 +149,53 @@
       "title": "FIRE 模拟器",
       "subtitle": "调整参数，预测你的财富曲线",
       "initialAssets": "初始资产",
-      "annualSavings": "年储蓄",
+      "annualIncome": "年收入",
       "annualExpense": "年支出",
+      "savingsRate": "储蓄率",
+      "annualSavingsLabel": "年储蓄",
       "expectedReturn": "预期收益率",
       "inflationRate": "通胀率",
       "withdrawalRate": "提款率",
       "currentAge": "当前年龄",
       "retirementAge": "退休年龄",
+      "assetsAtRetirement": "退休时资产",
+      "totalWithdrawal": "退休后累计支出",
       "fireTarget": "FIRE 目标",
+      "fireAgeLabel": "FIRE 达成",
+      "fireAgeNone": "无法达成",
+      "depletedWarning": "{age}岁时资金耗尽",
+      "negativeSavingsWarning": "支出超过收入，储蓄为负，资产将持续缩水。",
       "retirement": "退休",
       "unitWan": "万",
       "unitPercent": "%",
-      "unitAge": "岁"
+      "unitAge": "岁",
+      "infoTip": "FIRE 目标 = 年支出 ÷ 提款率（经典 4% 法则）\n\n积累期：每年储蓄 = 收入 − 支出（按通胀调整），资产按预期收益率复利增长\n\n提款期：首年提取 = 退休时资产 × 提款率，之后每年按通胀递增\n\n储蓄率越高、收益率越高，FIRE 达成越快；提款率越低，退休后资金越持久",
+      "planName": "计划名称",
+      "planNamePlaceholder": "例如：35岁退休计划",
+      "savePlan": "保存为计划",
+      "updatePlan": "更新计划",
+      "deletePlan": "删除计划",
+      "deleteConfirm": "确定删除该计划？",
+      "saveSuccess": "计划已保存",
+      "updateSuccess": "计划已更新",
+      "deleteSuccess": "计划已删除",
+      "saving": "保存中..."
     }
   },
   "AuthLoginPage": {
-    "brandLabel": "FIRE Master",
+    "brandLabel": "复利岛",
+    "brandSubtitle": "CompIsle",
     "heading": "欢迎回来，继续推进你的自由率。",
     "description": "登录后即可更新资产、记录现金流、查看退休模拟与实时指标。所有数据安全加密存储，仅你可见。",
     "formTitle": "登录账户",
     "formSubtitle": "输入邮箱和密码，后续也会支持更多方式。"
   },
   "AuthRegisterPage": {
-    "brandLabel": "FIRE Master",
+    "brandLabel": "复利岛",
+    "brandSubtitle": "CompIsle",
     "heading": "注册你的账户，打造专属 FIRE 看板。",
     "description": "创建一个私密空间，用于管理资产、现金流、退休模拟与自动化提醒。所有数据都会在你的区域内加密存储。",
-    "formTitle": "创建 FIRE Master 账户",
+    "formTitle": "创建复利岛账户",
     "formSubtitle": "注册后我们会根据你的资料定制仪表盘体验。"
   },
   "AccountPage": {

@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react';
+import Image from 'next/image';
 import { Bell, Sparkles } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
 import { Button } from '@/components/ui/button';
@@ -20,11 +21,11 @@ export default async function Layout({ children }: DashboardLayoutProps) {
 
       {/* 侧边栏 */}
       <aside className="relative z-10 hidden h-screen flex-shrink-0 border-r border-slate-200/80 bg-white/80 backdrop-blur-xl md:flex md:w-64 md:flex-col dark:border-white/10 dark:bg-white/5">
-        <div className="flex items-center gap-3 border-b border-slate-200/80 px-6 py-6 dark:border-white/10">
-          <span className="text-3xl">🔥</span>
+        <div className="flex h-16 items-center gap-3 border-b border-slate-200/80 px-6 dark:border-white/10">
+          <Image src="/icon.png" alt="CompIsle" width={32} height={32} />
           <div>
-            <p className="text-lg font-semibold text-slate-900 dark:text-white">{t('brandName')}</p>
-            <p className="text-xs text-slate-600 dark:text-white/60">{t('brandTagline')}</p>
+            <p className="text-base font-semibold text-slate-900 dark:text-white">{t('brandName')}</p>
+            <p className="text-[10px] uppercase tracking-widest text-slate-400 dark:text-white/40">{t('brandSubtitle')}</p>
           </div>
         </div>
         <div className="flex-1 overflow-y-auto">
@@ -34,14 +35,10 @@ export default async function Layout({ children }: DashboardLayoutProps) {
 
       {/* 主内容区 */}
       <div className="relative z-10 flex flex-1 flex-col overflow-hidden">
-        <header className="border-b border-slate-200/70 bg-white/70 px-6 py-5 backdrop-blur-xl dark:border-white/10 dark:bg-white/5">
-          <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+        <header className="h-16 border-b border-slate-200/70 bg-white/70 px-6 backdrop-blur-xl dark:border-white/10 dark:bg-white/5">
+          <div className="flex h-full flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
             <div>
-              <p className="text-xs uppercase tracking-[0.4em] text-slate-500 dark:text-white/70">{t('welcomeBack')}</p>
-              <h1 className="text-2xl font-semibold text-slate-900 dark:text-white">{t('dashboardTitle')}</h1>
-              <p className="text-sm text-slate-600 dark:text-white/70">
-                {t('dashboardSubtitle')}
-              </p>
+              <h1 className="text-lg font-medium text-slate-900 dark:text-white">{t('dashboardTitle')}</h1>
             </div>
             <div className="flex items-center gap-2">
               <LangSwitcher />
@@ -58,9 +55,12 @@ export default async function Layout({ children }: DashboardLayoutProps) {
                 size="sm"
                 className="shrink-0 bg-slate-900 text-white hover:bg-slate-800 dark:bg-white/90 dark:text-slate-900 dark:hover:bg-white"
                 data-tour="new-plan-button"
+                asChild
               >
-                <Sparkles className="h-4 w-4" />
-                {t('newPlanButton')}
+                <a href="#fire-simulator">
+                  <Sparkles className="h-4 w-4" />
+                  {t('newPlanButton')}
+                </a>
               </Button>
             </div>
           </div>
