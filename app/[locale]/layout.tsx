@@ -1,9 +1,6 @@
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-import '@/components/ui/global.css';
-import { inter, notoSans, notoSerif } from '@/components/ui/fonts';
 import { ThemeProvider } from '@/components/ui/theme-provider';
-import { clsx } from 'clsx';
 import { Locale, hasLocale, NextIntlClientProvider } from 'next-intl';
 import { routing } from '@/i18n/routing';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
@@ -30,14 +27,10 @@ export default async function LocaleLayout({
   }
   setRequestLocale(locale);
   return (
-    <html lang={locale} className="dark">
-      <body className={clsx(inter.variable, notoSans.variable, notoSerif.variable, 'font-sans antialiased')}>
-        <NextIntlClientProvider>
-          <ThemeProvider>
-            {children}
-          </ThemeProvider>
-        </NextIntlClientProvider>
-      </body>
-    </html>
+    <NextIntlClientProvider>
+      <ThemeProvider>
+        {children}
+      </ThemeProvider>
+    </NextIntlClientProvider>
   );
 }
