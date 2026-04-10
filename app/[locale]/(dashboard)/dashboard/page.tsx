@@ -1,4 +1,4 @@
-import { ArrowUpRight, PiggyBank, Wallet, Zap } from 'lucide-react';
+import { ArrowUpRight, Info, PiggyBank, Wallet, Zap } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
 import { auth } from '@/auth';
 import { /* fetchAssetDistribution, */ fetchDashboardMetrics, fetchFirePlan, /* fetchMonthlyCashFlowTrend, */ fetchRecentCashFlows } from '@/lib/data';
@@ -56,14 +56,28 @@ export default async function Page() {
 
       {/* FIRE Simulator */}
       <section className={glassCard}>
-        <div className="mb-4">
-          <p className="text-sm text-slate-500 dark:text-white/60">{t('simulator.title')}</p>
-          <h3 className="text-xl font-semibold text-slate-900 dark:text-white">{t('simulator.subtitle')}</h3>
+        <div className="mb-4 flex items-start justify-between">
+          <div>
+            <p className="text-sm text-slate-500 dark:text-white/60">{t('simulator.title')}</p>
+            <h3 className="text-sm text-slate-600 dark:text-white/70">{t('simulator.subtitle')}</h3>
+          </div>
+          <div className="group relative">
+            <button className="rounded-full p-1.5 text-slate-400 transition-colors hover:bg-slate-100 hover:text-slate-600 dark:text-white/40 dark:hover:bg-white/10 dark:hover:text-white/80">
+              <Info className="h-5 w-5" />
+            </button>
+            <div className="pointer-events-none absolute right-0 top-full z-50 mt-2 w-80 rounded-xl border border-slate-200 bg-white/95 p-4 text-sm leading-relaxed text-slate-600 opacity-0 shadow-lg backdrop-blur-xl transition-opacity group-hover:pointer-events-auto group-hover:opacity-100 dark:border-white/10 dark:bg-slate-900/95 dark:text-white/70">
+              {t('simulator.infoTip').split('\n\n').map((p, i) => (
+                <p key={i} className={i > 0 ? 'mt-2' : ''}>{p}</p>
+              ))}
+            </div>
+          </div>
         </div>
         <FireSimulator
           currentAssets={metrics.totalAssets}
           firePlan={plan ? {
-            annualSavings: 200000,
+            id: plan.id,
+            name: plan.name,
+            annualIncome: metrics.income > 0 ? metrics.income * 12 : undefined,
             annualExpense: Number(plan.annualExpense),
             expectedReturn: Number(plan.expectedReturn),
             inflationRate: Number(plan.inflationRate),
