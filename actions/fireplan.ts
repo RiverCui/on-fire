@@ -18,26 +18,23 @@ export async function saveFirePlan(
     name: string;
     currentAge: number;
     retirementAge: number;
+    lifeExpectancy: number;
     annualExpense: number;
     expectedReturn: number;
     inflationRate: number;
-    withdrawalRate: number;
   },
 ): Promise<FirePlanActionState> {
   const session = await auth();
   const userId = session?.user?.id;
   if (!userId) return { message: 'Unauthorized.' };
 
-  const parsed = firePlanFormSchema.safeParse({
-    ...data,
-    lifeExpectancy: 85,
-  });
+  const parsed = firePlanFormSchema.safeParse(data);
 
   if (!parsed.success) {
     return { errors: parsed.error.flatten().fieldErrors };
   }
 
-  const { id, name, currentAge, retirementAge, lifeExpectancy, annualExpense, withdrawalRate, expectedReturn, inflationRate } = parsed.data;
+  const { id, name, currentAge, retirementAge, lifeExpectancy, annualExpense, expectedReturn, inflationRate } = parsed.data;
 
   if (id) {
     const existing = await prisma.firePlan.findFirst({
@@ -47,7 +44,7 @@ export async function saveFirePlan(
 
     await prisma.firePlan.update({
       where: { id },
-      data: { name, currentAge, retirementAge, lifeExpectancy, annualExpense, withdrawalRate, expectedReturn, inflationRate },
+      data: { name, currentAge, retirementAge, lifeExpectancy, annualExpense, expectedReturn, inflationRate },
     });
 
     revalidatePath('/dashboard');
@@ -55,7 +52,7 @@ export async function saveFirePlan(
   }
 
   const created = await prisma.firePlan.create({
-    data: { userId, name, currentAge, retirementAge, lifeExpectancy, annualExpense, withdrawalRate, expectedReturn, inflationRate },
+    data: { userId, name, currentAge, retirementAge, lifeExpectancy, annualExpense, expectedReturn, inflationRate },
   });
 
   revalidatePath('/dashboard');
