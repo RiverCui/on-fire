@@ -1,4 +1,4 @@
-import { redirect } from 'next/navigation';
+import { redirect } from '@/i18n/navigation';
 import { auth } from '@/auth';
 
 export default async function LocalePage({ params }: PageProps<'/[locale]'>) {
@@ -6,5 +6,5 @@ export default async function LocalePage({ params }: PageProps<'/[locale]'>) {
   const session = await auth();
   const destination = session?.user ? 'dashboard' : 'login';
 
-  redirect(`/${locale}/${destination}`);
+  redirect({ href: `/${destination}`, locale });
 }

@@ -2,7 +2,8 @@
 
 import { useCallback, useState, useTransition } from 'react';
 import { useTranslations } from 'next-intl';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
+import { useRouter } from '@/i18n/navigation';
 import { ArrowDownLeft, ArrowUpRight, ChevronLeft, ChevronRight, Pencil, Plus, Trash2 } from 'lucide-react';
 import { Dialog } from '@/components/ui/dialog';
 import CashFlowForm from '@/components/dashboard/cashflow-form';
