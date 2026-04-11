@@ -81,7 +81,7 @@ export default async function Page() {
             annualExpense: Number(plan.annualExpense),
             expectedReturn: Number(plan.expectedReturn),
             inflationRate: Number(plan.inflationRate),
-            withdrawalRate: Number(plan.withdrawalRate),
+            lifeExpectancy: plan.lifeExpectancy,
             currentAge: plan.currentAge,
             retirementAge: plan.retirementAge,
           } : null}
@@ -132,8 +132,8 @@ export default async function Page() {
                 <p className="text-sm font-semibold text-slate-900 dark:text-white">{formatCurrency(Number(plan.annualExpense))}</p>
               </div>
               <div>
-                <p className="text-[11px] uppercase tracking-wide text-slate-500 dark:text-white/50">{t('progressSection.plan.withdrawalRate')}</p>
-                <p className="text-sm font-semibold text-slate-900 dark:text-white">{(Number(plan.withdrawalRate) * 100).toFixed(1)}%</p>
+                <p className="text-[11px] uppercase tracking-wide text-slate-500 dark:text-white/50">{t('progressSection.plan.lifeExpectancy')}</p>
+                <p className="text-sm font-semibold text-slate-900 dark:text-white">{plan.lifeExpectancy}</p>
               </div>
               <div>
                 <p className="text-[11px] uppercase tracking-wide text-slate-500 dark:text-white/50">{t('progressSection.plan.currentAge')}</p>
