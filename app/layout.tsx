@@ -2,7 +2,7 @@ import { ReactNode } from 'react';
 import { clsx } from 'clsx';
 import { getLocale } from 'next-intl/server';
 import '@/components/ui/global.css';
-import { inter, notoSans, notoSerif } from '@/components/ui/fonts';
+import { inter, notoSans, notoSerif, playfair } from '@/components/ui/fonts';
 
 type Props = {
   children: ReactNode;
@@ -19,7 +19,7 @@ export default async function RootLayout({ children }: Props) {
           }}
         />
       </head>
-      <body className={clsx(inter.variable, notoSans.variable, notoSerif.variable, 'font-sans antialiased')}>
+      <body className={clsx(inter.variable, notoSans.variable, notoSerif.variable, playfair.variable, 'font-sans antialiased')}>
         {children}
       </body>
     </html>

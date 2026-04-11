@@ -182,21 +182,28 @@
       "saving": "Saving..."
     }
   },
+  "AuthBrand": {
+    "name": "CompIsle"
+  },
   "AuthLoginPage": {
-    "brandLabel": "CompIsle",
-    "brandSubtitle": "Compound Isle",
-    "heading": "Welcome back—keep advancing your freedom rate.",
-    "description": "Log in to update assets, record cash flow, review retirement simulations, and monitor live metrics. Everything is encrypted and visible only to you.",
-    "formTitle": "Log into your account",
-    "formSubtitle": "Enter your email and password. More login methods are coming soon."
+    "heading": "Your Compound Interest Island",
+    "description": "A personal finance tool to harness the power of compound interest — track assets, manage cash flow, and simulate your path to financial independence.",
+    "features": {
+      "assets": { "title": "Asset Tracking", "desc": "Monitor accounts, allocations, and net worth in real time." },
+      "cashflow": { "title": "Cash Flow", "desc": "Record income and expenses, visualize trends over time." },
+      "fire": { "title": "FIRE Simulator", "desc": "Run retirement simulations and track your progress to freedom." },
+      "security": { "title": "Private & Encrypted", "desc": "Your data is encrypted and visible only to you." }
+    }
   },
   "AuthRegisterPage": {
-    "brandLabel": "CompIsle",
-    "brandSubtitle": "Compound Isle",
-    "heading": "Create your account and own your FIRE playbook.",
-    "description": "Build a private dashboard for assets, cash flow, FIRE simulations, and automation. Your data stays encrypted on servers in your region.",
-    "formTitle": "Create a CompIsle account",
-    "formSubtitle": "We’ll tailor the dashboard to your profile once you sign up."
+    "heading": "Your Compound Interest Island",
+    "description": "A personal finance tool to harness the power of compound interest — track assets, manage cash flow, and simulate your path to financial independence.",
+    "features": {
+      "assets": { "title": "Asset Tracking", "desc": "Monitor accounts, allocations, and net worth in real time." },
+      "cashflow": { "title": "Cash Flow", "desc": "Record income and expenses, visualize trends over time." },
+      "fire": { "title": "FIRE Simulator", "desc": "Run retirement simulations and track your progress to freedom." },
+      "security": { "title": "Private & Encrypted", "desc": "Your data is encrypted and visible only to you." }
+    }
   },
   "AccountPage": {
     "title": "Asset Accounts",

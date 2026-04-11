@@ -182,21 +182,28 @@
       "saving": "保存中..."
     }
   },
+  "AuthBrand": {
+    "name": "复利岛"
+  },
   "AuthLoginPage": {
-    "brandLabel": "复利岛",
-    "brandSubtitle": "CompIsle",
-    "heading": "欢迎回来，继续推进你的自由率。",
-    "description": "登录后即可更新资产、记录现金流、查看退休模拟与实时指标。所有数据安全加密存储，仅你可见。",
-    "formTitle": "登录账户",
-    "formSubtitle": "输入邮箱和密码，后续也会支持更多方式。"
+    "heading": "你的复利岛",
+    "description": "一款借助复利力量的个人财务工具 — 追踪资产、管理现金流，模拟你的财务自由之路。",
+    "features": {
+      "assets": { "title": "资产追踪", "desc": "实时监控账户、配置与净资产变化。" },
+      "cashflow": { "title": "现金流", "desc": "记录收支，可视化趋势变化。" },
+      "fire": { "title": "FIRE 模拟", "desc": "运行退休模拟，追踪财务自由进度。" },
+      "security": { "title": "私密加密", "desc": "数据加密存储，仅你可见。" }
+    }
   },
   "AuthRegisterPage": {
-    "brandLabel": "复利岛",
-    "brandSubtitle": "CompIsle",
-    "heading": "注册你的账户，打造专属 FIRE 看板。",
-    "description": "创建一个私密空间，用于管理资产、现金流、退休模拟与自动化提醒。所有数据都会在你的区域内加密存储。",
-    "formTitle": "创建复利岛账户",
-    "formSubtitle": "注册后我们会根据你的资料定制仪表盘体验。"
+    "heading": "你的复利岛",
+    "description": "一款借助复利力量的个人财务工具 — 追踪资产、管理现金流，模拟你的财务自由之路。",
+    "features": {
+      "assets": { "title": "资产追踪", "desc": "实时监控账户、配置与净资产变化。" },
+      "cashflow": { "title": "现金流", "desc": "记录收支，可视化趋势变化。" },
+      "fire": { "title": "FIRE 模拟", "desc": "运行退休模拟，追踪财务自由进度。" },
+      "security": { "title": "私密加密", "desc": "数据加密存储，仅你可见。" }
+    }
   },
   "AccountPage": {
     "title": "资产账户",

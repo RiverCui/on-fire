@@ -10,7 +10,6 @@ import {
   CircleAlert,
   Key,
   User,
-  ArrowRight,
 } from 'lucide-react';
 
 import { authenticate, register } from '@/actions/auth';
@@ -27,6 +26,12 @@ const oauthProviders = [
   { id: 'github', labelKey: 'oauth.github' },
 ] as const;
 
+const inputClass =
+  'peer block w-full rounded-lg border border-slate-200/80 bg-white/60 py-2.5 pl-10 pr-3 text-sm backdrop-blur placeholder:text-slate-400 focus:border-slate-300 focus:outline-none focus:ring-2 focus:ring-slate-200/60 dark:border-white/[0.08] dark:bg-white/[0.04] dark:text-white dark:placeholder:text-white/30 dark:focus:border-white/15 dark:focus:ring-white/[0.06]';
+
+const iconClass =
+  'pointer-events-none absolute left-3 top-1/2 h-[16px] w-[16px] -translate-y-1/2 text-slate-300 peer-focus:text-slate-500 dark:text-white/25 dark:peer-focus:text-white/50';
+
 export default function AuthForm({ mode }: AuthFormProps) {
   const t = useTranslations('AuthForm');
   const locale = useLocale();
@@ -42,92 +47,58 @@ export default function AuthForm({ mode }: AuthFormProps) {
     mode === 'login' ? t('switchPrompt.createAccount') : t('switchPrompt.logIn');
 
   return (
-    <form action={formAction} className="space-y-4">
-      <div className="flex-1 rounded-3xl border border-slate-200 bg-white/90 p-8 text-slate-900 shadow-2xl backdrop-blur dark:border-white/10 dark:bg-white/5 dark:text-white">
-        <div className="space-y-3">
-          <h1 className="text-2xl font-semibold text-slate-900 dark:text-white">
+    <form action={formAction}>
+      <div className="rounded-2xl border border-slate-200/60 bg-white/70 p-7 shadow-xl shadow-black/[0.03] backdrop-blur-xl dark:border-white/[0.06] dark:bg-white/[0.04] dark:shadow-black/30">
+        <div className="space-y-1.5">
+          <h2 className="text-lg font-semibold text-slate-800 dark:text-white/90">
             {mode === 'login' ? t('titles.login') : t('titles.register')}
-          </h1>
-          <p className="text-sm text-slate-500 dark:text-white/70">
+          </h2>
+          <p className="text-xs text-slate-400 dark:text-white/40">
             {mode === 'login' ? t('subtitles.login') : t('subtitles.register')}
           </p>
         </div>
 
-        <div className="mt-6 space-y-4">
+        <div className="mt-5 space-y-4">
           {mode === 'register' && (
             <div>
-              <label className="mb-2 block text-xs font-medium text-slate-600 dark:text-white/80" htmlFor="name">
+              <label className="mb-1.5 block text-xs font-medium text-slate-500 dark:text-white/50" htmlFor="name">
                 {t('nameLabel')}
               </label>
               <div className="relative">
-                <input
-                  className="peer block w-full rounded-md border border-slate-200 bg-white py-[9px] pl-10 pr-3 text-sm outline-2 placeholder:text-slate-400 dark:border-white/20 dark:bg-white/5 dark:text-white dark:placeholder:text-white/60"
-                  id="name"
-                  name="name"
-                  type="text"
-                  placeholder={t('namePlaceholder')}
-                  required
-                  minLength={2}
-                />
-                <User className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-slate-400 peer-focus:text-slate-900 dark:text-white/60 dark:peer-focus:text-white" />
+                <input className={inputClass} id="name" name="name" type="text" placeholder={t('namePlaceholder')} required minLength={2} />
+                <User className={iconClass} />
               </div>
             </div>
           )}
 
           <div>
-            <label className="mb-2 block text-xs font-medium text-slate-600 dark:text-white/80" htmlFor="email">
+            <label className="mb-1.5 block text-xs font-medium text-slate-500 dark:text-white/50" htmlFor="email">
               {t('emailLabel')}
             </label>
             <div className="relative">
-              <input
-                className="peer block w-full rounded-md border border-slate-200 bg-white py-[9px] pl-10 pr-3 text-sm outline-2 placeholder:text-slate-400 dark:border-white/20 dark:bg-white/5 dark:text-white dark:placeholder:text-white/60"
-                id="email"
-                type="email"
-                name="email"
-                placeholder={t('emailPlaceholder')}
-                required
-              />
-              <AtSign className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-slate-400 peer-focus:text-slate-900 dark:text-white/60 dark:peer-focus:text-white" />
+              <input className={inputClass} id="email" type="email" name="email" placeholder={t('emailPlaceholder')} required />
+              <AtSign className={iconClass} />
             </div>
           </div>
 
           <div>
-            <label className="mb-2 block text-xs font-medium text-slate-600 dark:text-white/80" htmlFor="password">
+            <label className="mb-1.5 block text-xs font-medium text-slate-500 dark:text-white/50" htmlFor="password">
               {t('passwordLabel')}
             </label>
             <div className="relative">
-              <input
-                className="peer block w-full rounded-md border border-slate-200 bg-white py-[9px] pl-10 pr-3 text-sm outline-2 placeholder:text-slate-400 dark:border-white/20 dark:bg-white/5 dark:text-white dark:placeholder:text-white/60"
-                id="password"
-                type="password"
-                name="password"
-                placeholder={t('passwordPlaceholder')}
-                required
-                minLength={6}
-              />
-                <Key className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-slate-400 peer-focus:text-slate-900 dark:text-white/60 dark:peer-focus:text-white" />
+              <input className={inputClass} id="password" type="password" name="password" placeholder={t('passwordPlaceholder')} required minLength={6} />
+              <Key className={iconClass} />
             </div>
           </div>
 
           {mode === 'register' && (
             <div>
-              <label
-                className="mb-2 block text-xs font-medium text-slate-600 dark:text-white/80"
-                htmlFor="confirmPassword"
-              >
+              <label className="mb-1.5 block text-xs font-medium text-slate-500 dark:text-white/50" htmlFor="confirmPassword">
                 {t('confirmPasswordLabel')}
               </label>
               <div className="relative">
-                <input
-                  className="peer block w-full rounded-md border border-slate-200 bg-white py-[9px] pl-10 pr-3 text-sm outline-2 placeholder:text-slate-400 dark:border-white/20 dark:bg-white/5 dark:text-white dark:placeholder:text-white/60"
-                  id="confirmPassword"
-                  type="password"
-                  name="confirmPassword"
-                  placeholder={t('confirmPasswordPlaceholder')}
-                  required
-                  minLength={6}
-                />
-                  <Key className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-slate-400 peer-focus:text-slate-900 dark:text-white/60 dark:peer-focus:text-white" />
+                <input className={inputClass} id="confirmPassword" type="password" name="confirmPassword" placeholder={t('confirmPasswordPlaceholder')} required minLength={6} />
+                <Key className={iconClass} />
               </div>
             </div>
           )}
@@ -135,50 +106,47 @@ export default function AuthForm({ mode }: AuthFormProps) {
 
         <input type="hidden" name="redirectTo" value={callbackUrl} />
         <Button
-          className="mt-6 w-full rounded-2xl border border-slate-200 bg-slate-900 py-3 text-base font-semibold text-white shadow-lg shadow-black/10 transition hover:bg-slate-800 focus-visible:ring-2 focus-visible:ring-slate-300 dark:border-white/20 dark:bg-slate-900/80 dark:hover:bg-white/15 dark:focus-visible:ring-white/40"
+          className="mt-5 w-full rounded-lg border border-slate-700 bg-slate-800 py-2.5 text-sm font-medium text-white shadow-sm transition hover:bg-slate-700 focus-visible:ring-2 focus-visible:ring-slate-400 dark:border-white/[0.12] dark:bg-white/[0.14] dark:backdrop-blur dark:hover:bg-white/[0.18]"
           aria-disabled={isPending}
         >
           {mode === 'login' ? t('submit.login') : t('submit.register')}
-          <ArrowRight className="ml-auto h-5 w-5 text-gray-50 dark:text-white" />
         </Button>
 
-        <div
-          className="flex h-8 items-end space-x-1 text-sm text-red-500"
-          aria-live="polite"
-          aria-atomic="true"
-        >
+        <div className="flex h-8 items-end space-x-1 text-xs text-red-500" aria-live="polite" aria-atomic="true">
           {errorMessage && (
             <>
-              <CircleAlert className="h-5 w-5" />
+              <CircleAlert className="h-4 w-4" />
               <p>{errorMessage}</p>
             </>
           )}
         </div>
 
-        <div className="mt-2 text-center text-sm text-slate-600 dark:text-white/70">
+        <div className="text-center text-xs text-slate-400 dark:text-white/40">
           {switchLabel}{' '}
-          <Link href={switchHref} className="font-semibold text-slate-900/80 hover:underline dark:text-white">
+          <Link href={switchHref} className="font-medium text-slate-700 hover:underline dark:text-white/70">
             {switchCta}
           </Link>
         </div>
 
-        <div className="mt-6 space-y-4 rounded-2xl border border-slate-200 bg-slate-100 p-4 dark:border-white/15 dark:bg-white/10">
-          <div className="text-center text-xs uppercase tracking-[0.3em] text-slate-800 dark:text-white/70">
+        <div className="mt-5 flex items-center gap-3">
+          <div className="h-px flex-1 bg-slate-200/60 dark:bg-white/[0.06]" />
+          <span className="text-[10px] uppercase tracking-[0.2em] text-slate-300 dark:text-white/25">
             {t('oauthDivider')}
-          </div>
-          <div className="grid gap-3">
-            {oauthProviders.map(({ id, labelKey }) => (
-              <Button
-                key={id}
-                type="button"
-                variant="outline"
-                className="w-full border border-slate-200 bg-white text-slate-900/80 transition hover:bg-slate-50 dark:border-white/20 dark:bg-transparent dark:text-white dark:hover:bg-white/10"
-                onClick={() => signIn(id, { callbackUrl })}
-              >
-                {t(labelKey)}
-              </Button>
-            ))}
-          </div>
+          </span>
+          <div className="h-px flex-1 bg-slate-200/60 dark:bg-white/[0.06]" />
+        </div>
+        <div className="mt-4 grid gap-2.5">
+          {oauthProviders.map(({ id, labelKey }) => (
+            <Button
+              key={id}
+              type="button"
+              variant="outline"
+              className="w-full rounded-lg border border-slate-200/80 bg-white/50 text-sm text-slate-600 backdrop-blur transition hover:bg-white/80 dark:border-white/[0.08] dark:bg-white/[0.04] dark:text-white/60 dark:hover:bg-white/[0.07]"
+              onClick={() => signIn(id, { callbackUrl })}
+            >
+              {t(labelKey)}
+            </Button>
+          ))}
         </div>
       </div>
     </form>

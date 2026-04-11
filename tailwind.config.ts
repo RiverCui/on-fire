@@ -71,6 +71,11 @@ const config: Config = {
   			serif: [
   				'var(--font-noto-serif)',
   				'serif'
+  			],
+  			display: [
+  				'var(--font-playfair)',
+  				'var(--font-noto-serif)',
+  				'serif'
   			]
   		},
   		borderRadius: {
