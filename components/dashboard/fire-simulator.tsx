@@ -57,7 +57,7 @@ export default function FireSimulator({ currentAssets, firePlan }: FireSimulator
   const [params, setParams] = useState<FireParams>({
     initialAssets: currentAssets || 500000,
     annualIncome: firePlan?.annualIncome ?? 300000,
-    annualExpense: firePlan?.annualExpense ?? 120000,
+    annualExpense: firePlan?.annualExpense ?? 100000,
     expectedReturn: firePlan?.expectedReturn ?? 0.07,
     inflationRate: firePlan?.inflationRate ?? 0.03,
     lifeExpectancy: firePlan?.lifeExpectancy ?? 90,
