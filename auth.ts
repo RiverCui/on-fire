@@ -1,5 +1,4 @@
 import NextAuth from 'next-auth';
-import { authConfig } from './auth.config';
 import Credentials from 'next-auth/providers/credentials';
 import Google from 'next-auth/providers/google';
 import GitHub from 'next-auth/providers/github';
@@ -20,7 +19,9 @@ async function getUser(email: string): Promise<User | null> {
 }
 
 export const { auth, signIn, signOut, handlers } = NextAuth({
-  ...authConfig,
+  pages: {
+    signIn: '/login',
+  },
   providers: [
     Google,
     GitHub({
@@ -49,6 +50,27 @@ export const { auth, signIn, signOut, handlers } = NextAuth({
     }),
   ],
   callbacks: {
+    authorized({ auth, request: { nextUrl } }) {
+      const isLoggedIn = !!auth?.user;
+
+      const isAuthPage = ['/login', '/register'].some((segment) =>
+        nextUrl.pathname.includes(segment)
+      );
+      const isPublicPage = nextUrl.pathname === '/' || isAuthPage;
+
+      if(isPublicPage) {
+        if(isLoggedIn && isAuthPage) {
+          return Response.redirect(new URL('/dashboard', nextUrl));
+        }
+        return true;
+      }
+
+      if(isLoggedIn) {
+        return true;
+      }
+
+      return false;
+    },
     async signIn({ user, account }) {
       // OAuth 登录时同步用户到 Prisma User 表
       if (account?.provider === 'google' || account?.provider === 'github') {
