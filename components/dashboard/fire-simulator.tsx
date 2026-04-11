@@ -28,7 +28,7 @@ type FirePlanData = {
   annualExpense?: number;
   expectedReturn?: number;
   inflationRate?: number;
-  withdrawalRate?: number;
+  lifeExpectancy?: number;
   currentAge?: number;
   retirementAge?: number;
 } | null;
@@ -57,19 +57,28 @@ export default function FireSimulator({ currentAssets, firePlan }: FireSimulator
   const [params, setParams] = useState<FireParams>({
     initialAssets: currentAssets || 500000,
     annualIncome: firePlan?.annualIncome ?? 300000,
-    annualExpense: firePlan?.annualExpense ?? 120000,
+    annualExpense: firePlan?.annualExpense ?? 100000,
     expectedReturn: firePlan?.expectedReturn ?? 0.07,
     inflationRate: firePlan?.inflationRate ?? 0.03,
-    withdrawalRate: firePlan?.withdrawalRate ?? 0.04,
+    lifeExpectancy: firePlan?.lifeExpectancy ?? 90,
     currentAge: firePlan?.currentAge ?? 25,
     retirementAge: firePlan?.retirementAge ?? 45,
   });
 
   const { data, fireAge, depletedAge, assetsAtRetirement, totalWithdrawal } = useMemo(() => calculateFireCurve(params), [params]);
   const fireTarget = useMemo(
-    () => calculateFireTarget(params.annualExpense, params.withdrawalRate),
-    [params.annualExpense, params.withdrawalRate],
+    () => calculateFireTarget(
+      params.annualExpense, params.expectedReturn, params.inflationRate,
+      params.currentAge, params.retirementAge, params.lifeExpectancy,
+    ),
+    [params.annualExpense, params.expectedReturn, params.inflationRate, params.currentAge, params.retirementAge, params.lifeExpectancy],
   );
+  const yearsToRetirement = Math.max(params.retirementAge - params.currentAge, 0);
+  const retirementExpense = useMemo(
+    () => Math.round(params.annualExpense * Math.pow(1 + params.inflationRate, yearsToRetirement)),
+    [params.annualExpense, params.inflationRate, yearsToRetirement],
+  );
+  const impliedWithdrawalRate = assetsAtRetirement > 0 ? retirementExpense / assetsAtRetirement : 0;
   const savingsRate = params.annualIncome > 0
     ? Math.round((params.annualIncome - params.annualExpense) / params.annualIncome * 100)
     : 0;
@@ -84,7 +93,7 @@ export default function FireSimulator({ currentAssets, firePlan }: FireSimulator
     { key: 'annualExpense', min: 10000, max: 2000000, step: 10000, format: formatWan },
     { key: 'expectedReturn', min: 0, max: 0.15, step: 0.005, format: formatPercent },
     { key: 'inflationRate', min: 0, max: 0.10, step: 0.005, format: formatPercent },
-    { key: 'withdrawalRate', min: 0.02, max: 0.06, step: 0.001, format: formatPercent },
+    { key: 'lifeExpectancy', min: 60, max: 100, step: 1, format: formatAge },
     { key: 'currentAge', min: 18, max: 60, step: 1, format: formatAge },
     { key: 'retirementAge', min: 30, max: 70, step: 1, format: formatAge },
   ];
@@ -101,10 +110,10 @@ export default function FireSimulator({ currentAssets, firePlan }: FireSimulator
         name: planName || t('planNamePlaceholder'),
         currentAge: params.currentAge,
         retirementAge: params.retirementAge,
+        lifeExpectancy: params.lifeExpectancy,
         annualExpense: params.annualExpense,
         expectedReturn: params.expectedReturn,
         inflationRate: params.inflationRate,
-        withdrawalRate: params.withdrawalRate,
       });
       if (result.success) {
         setPlanId(result.planId);
@@ -173,6 +182,13 @@ export default function FireSimulator({ currentAssets, firePlan }: FireSimulator
         </div>
         <span className="text-slate-300 dark:text-white/20">|</span>
         <div className="flex items-center gap-2">
+          <span className="text-slate-500 dark:text-white/60">{t('retirementExpenseLabel')}</span>
+          <span className="font-semibold text-slate-900 dark:text-white">
+            {formatWan(retirementExpense)}
+          </span>
+        </div>
+        <span className="text-slate-300 dark:text-white/20">|</span>
+        <div className="flex items-center gap-2">
           <span className="text-slate-500 dark:text-white/60">{t('fireAgeLabel')}</span>
           <span className={`font-semibold ${fireAge ? 'text-emerald-600 dark:text-emerald-400' : 'text-slate-400 dark:text-white/40'}`}>
             {fireAge ? `${fireAge}${t('unitAge')}` : t('fireAgeNone')}
@@ -185,8 +201,10 @@ export default function FireSimulator({ currentAssets, firePlan }: FireSimulator
         </div>
         <span className="text-slate-300 dark:text-white/20">|</span>
         <div className="flex items-center gap-2">
-          <span className="text-slate-500 dark:text-white/60">{t('totalWithdrawal')}</span>
-          <span className="font-semibold text-slate-900 dark:text-white">{formatWan(totalWithdrawal)}</span>
+          <span className="text-slate-500 dark:text-white/60">{t('impliedWithdrawalRate')}</span>
+          <span className={`font-semibold ${impliedWithdrawalRate > 0 && impliedWithdrawalRate <= 0.04 ? 'text-emerald-600 dark:text-emerald-400' : impliedWithdrawalRate <= 0.05 ? 'text-amber-600 dark:text-amber-400' : 'text-rose-500 dark:text-rose-400'}`}>
+            {impliedWithdrawalRate > 0 ? `${(impliedWithdrawalRate * 100).toFixed(1)}%` : '-'}
+          </span>
         </div>
         {depletedAge && (
           <>
@@ -264,7 +282,7 @@ export default function FireSimulator({ currentAssets, firePlan }: FireSimulator
           {depletedAge && (
             <ReferenceArea
               x1={depletedAge}
-              x2={90}
+              x2={params.lifeExpectancy}
               fill="#f43f5e"
               fillOpacity={0.06}
             />

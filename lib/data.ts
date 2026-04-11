@@ -29,10 +29,26 @@ export async function fetchFirePlan(userId: string) {
     planName = firePlan.name;
 
     if (firePlan.customTarget && firePlan.customTarget.gt(0)) {
-     targetDecimal = firePlan.customTarget; 
+      targetDecimal = firePlan.customTarget;
     } else {
-      if (!firePlan.withdrawalRate.isZero())
-      targetDecimal = firePlan.annualExpense.div(firePlan.withdrawalRate);
+      // PV annuity target calculation
+      const expense = firePlan.annualExpense.toNumber();
+      const r = firePlan.expectedReturn.toNumber();
+      const g = firePlan.inflationRate.toNumber();
+      const yearsToRetirement = Math.max(firePlan.retirementAge - firePlan.currentAge, 0);
+      const retirementYears = Math.max(firePlan.lifeExpectancy - firePlan.retirementAge, 0);
+
+      if (retirementYears > 0) {
+        const retirementExpense = expense * Math.pow(1 + g, yearsToRetirement);
+        let target: number;
+        if (Math.abs(r - g) < 1e-9) {
+          target = retirementExpense * retirementYears / (1 + r);
+        } else {
+          const ratio = (1 + g) / (1 + r);
+          target = retirementExpense * (1 - Math.pow(ratio, retirementYears)) / (r - g);
+        }
+        targetDecimal = new Prisma.Decimal(Math.round(target));
+      }
     }
   }
 
