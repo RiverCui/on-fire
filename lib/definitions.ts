@@ -49,7 +49,6 @@ export type FirePlan = Timestamped & {
   retirementAge: number;
   lifeExpectancy: number;
   annualExpense: DecimalValue;
-  withdrawalRate: DecimalValue;
   expectedReturn: DecimalValue;
   inflationRate: DecimalValue;
   customTarget: DecimalValue | null;
@@ -106,7 +105,6 @@ export const firePlanFormSchema = z.object({
   retirementAge: z.coerce.number().int().min(16).max(90),
   lifeExpectancy: z.coerce.number().int().min(40).max(120),
   annualExpense: positiveMoney,
-  withdrawalRate: percentSchema.default(0.04).optional(),
   expectedReturn: percentSchema.default(0.05),
   inflationRate: percentSchema.default(0.03),
   customTarget: positiveMoney.optional().nullable(),

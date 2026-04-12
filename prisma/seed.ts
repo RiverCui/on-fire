@@ -41,7 +41,6 @@ async function main() {
 			retirementAge: 35,
 			lifeExpectancy: 85,
 			annualExpense: 120000, // 年支出 12 万
-			withdrawalRate: 0.04,
 			expectedReturn: 0.07,
 			inflationRate: 0.03,
 			note: '目标：35岁实现财务自由',
