@@ -40,17 +40,26 @@ export async function createAssetAccount(
     return { errors: parsed.error.flatten().fieldErrors };
   }
 
-  await prisma.assetAccount.create({
-    data: {
-      userId,
-      name: parsed.data.name,
-      type: parsed.data.type as AssetType,
-      currency: parsed.data.currency,
-      currentBalance: parsed.data.currentBalance,
-    },
+  await prisma.$transaction(async (tx) => {
+    const account = await tx.assetAccount.create({
+      data: {
+        userId,
+        name: parsed.data.name,
+        type: parsed.data.type as AssetType,
+        currency: parsed.data.currency,
+        currentBalance: parsed.data.currentBalance,
+      },
+    });
+    await tx.assetRecord.create({
+      data: {
+        assetAccountId: account.id,
+        amount: parsed.data.currentBalance,
+      },
+    });
   });
 
   revalidatePath('/dashboard/account');
+  revalidatePath('/dashboard');
   return { success: true, message: 'Account created.' };
 }
 
@@ -80,17 +89,51 @@ export async function updateAssetAccount(
   });
   if (!account) return { message: 'Account not found.' };
 
-  await prisma.assetAccount.update({
-    where: { id },
-    data: {
-      name: parsed.data.name,
-      type: parsed.data.type as AssetType,
-      currency: parsed.data.currency,
-      currentBalance: parsed.data.currentBalance,
-    },
+  const balanceChanged = !account.currentBalance.equals(parsed.data.currentBalance);
+
+  await prisma.$transaction(async (tx) => {
+    await tx.assetAccount.update({
+      where: { id },
+      data: {
+        name: parsed.data.name,
+        type: parsed.data.type as AssetType,
+        currency: parsed.data.currency,
+        currentBalance: parsed.data.currentBalance,
+      },
+    });
+
+    if (balanceChanged) {
+      // Same-day upsert: one snapshot per day per account
+      const startOfDay = new Date();
+      startOfDay.setHours(0, 0, 0, 0);
+      const endOfDay = new Date(startOfDay);
+      endOfDay.setDate(endOfDay.getDate() + 1);
+
+      const todayRecord = await tx.assetRecord.findFirst({
+        where: {
+          assetAccountId: id,
+          recordDate: { gte: startOfDay, lt: endOfDay },
+        },
+      });
+
+      if (todayRecord) {
+        await tx.assetRecord.update({
+          where: { id: todayRecord.id },
+          data: { amount: parsed.data.currentBalance },
+        });
+      } else {
+        await tx.assetRecord.create({
+          data: {
+            assetAccountId: id,
+            amount: parsed.data.currentBalance,
+          },
+        });
+      }
+    }
   });
 
   revalidatePath('/dashboard/account');
+  revalidatePath('/dashboard');
   return { success: true, message: 'Account updated.' };
 }
 
@@ -104,8 +147,10 @@ export async function deleteAssetAccount(id: string): Promise<AssetActionState> 
   });
   if (!account) return { message: 'Account not found.' };
 
+  // AssetRecord rows are removed via onDelete: Cascade
   await prisma.assetAccount.delete({ where: { id } });
 
   revalidatePath('/dashboard/account');
+  revalidatePath('/dashboard');
   return { success: true, message: 'Account deleted.' };
 }

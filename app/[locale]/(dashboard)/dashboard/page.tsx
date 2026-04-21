@@ -1,8 +1,9 @@
 import { ArrowUpRight, Info, PiggyBank, Wallet, Zap } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
 import { auth } from '@/auth';
-import { /* fetchAssetDistribution, */ fetchDashboardMetrics, fetchFirePlan, /* fetchMonthlyCashFlowTrend, */ fetchRecentCashFlows } from '@/lib/data';
+import { /* fetchAssetDistribution, */ fetchDashboardMetrics, fetchFirePlan, /* fetchMonthlyCashFlowTrend, */ fetchNetWorthTrend, fetchRecentCashFlows } from '@/lib/data';
 import AnimatedProgress from '@/components/dashboard/animated-progress';
+import NetWorthLineChart from '@/components/dashboard/charts/net-worth-line-chart';
 // import AssetPieChart from '@/components/dashboard/charts/asset-pie-chart';
 // import CashFlowBarChart from '@/components/dashboard/charts/cashflow-bar-chart';
 import FireSimulator from '@/components/dashboard/fire-simulator';
@@ -19,10 +20,11 @@ export default async function Page() {
   if (!userId) {
     return <div>{t('pleaseLogin')}</div>;
   }
-  const [progress, metrics, recentFlows] = await Promise.all([
+  const [progress, metrics, recentFlows, netWorthTrend] = await Promise.all([
     fetchFirePlan(userId),
     fetchDashboardMetrics(userId),
     fetchRecentCashFlows(userId, 5),
+    fetchNetWorthTrend(userId, '1Y'),
     // fetchAssetDistribution(userId),
     // fetchMonthlyCashFlowTrend(userId, 6),
   ]);
@@ -170,6 +172,14 @@ export default async function Page() {
             ))}
           </ul>
         </div>
+      </section>
+
+      <section className={glassCard}>
+        <div className="mb-4">
+          <p className="text-sm text-slate-500 dark:text-white/60">{t('netWorthTrend.title')}</p>
+          <h3 className="text-xl font-semibold text-slate-900 dark:text-white">{t('netWorthTrend.subtitle')}</h3>
+        </div>
+        <NetWorthLineChart data={netWorthTrend} />
       </section>
 
       {/* C Section: Charts (temporarily hidden)

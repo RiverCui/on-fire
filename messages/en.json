@@ -118,6 +118,12 @@
       "expense": "Expense",
       "noData": "No cash flow data yet"
     },
+    "netWorthTrend": {
+      "title": "Net Worth Trend",
+      "subtitle": "Total across all accounts",
+      "label": "Net worth",
+      "noData": "No asset data yet"
+    },
     "allocation": {
       "title": "Asset allocation",
       "subtitle": "Multi-account, multi-currency",

@@ -118,6 +118,12 @@
       "expense": "支出",
       "noData": "暂无收支数据"
     },
+    "netWorthTrend": {
+      "title": "净资产走势",
+      "subtitle": "所有账户余额汇总",
+      "label": "净资产",
+      "noData": "暂无资产数据"
+    },
     "allocation": {
       "title": "资产配置",
       "subtitle": "多账户，多币种",

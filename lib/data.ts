@@ -205,6 +205,72 @@ export async function fetchMonthlyCashFlowTrend(userId: string, months = 6) {
   return result;
 }
 
+// Net worth trend: total assets over time, reconstructed from AssetRecord snapshots.
+// For each day with any snapshot, emit (date, sum of latest balance per account ≤ that day).
+export type TrendRange = '1M' | '3M' | '6M' | '1Y';
+
+export async function fetchNetWorthTrend(userId: string, range: TrendRange = '6M') {
+  const days = { '1M': 30, '3M': 90, '6M': 180, '1Y': 365 }[range];
+  const start = new Date();
+  start.setHours(0, 0, 0, 0);
+  start.setDate(start.getDate() - days);
+
+  const accounts = await prisma.assetAccount.findMany({
+    where: { userId },
+    select: { id: true, currentBalance: true },
+  });
+  if (accounts.length === 0) return [];
+
+  const accountIds = accounts.map((a) => a.id);
+
+  // Fetch all snapshots (we need pre-range records to seed initial balances)
+  const records = await prisma.assetRecord.findMany({
+    where: { assetAccountId: { in: accountIds } },
+    orderBy: { recordDate: 'asc' },
+    select: { assetAccountId: true, recordDate: true, amount: true },
+  });
+
+  // Running balance per account, replayed day by day
+  const balances = new Map<string, number>();
+  for (const id of accountIds) balances.set(id, 0);
+
+  const toDayKey = (d: Date) => d.toISOString().slice(0, 10);
+  const startKey = toDayKey(start);
+
+  // Group records by day
+  const byDay = new Map<string, typeof records>();
+  for (const r of records) {
+    const key = toDayKey(r.recordDate);
+    const bucket = byDay.get(key);
+    if (bucket) bucket.push(r);
+    else byDay.set(key, [r]);
+  }
+
+  const sortedDays = [...byDay.keys()].sort();
+  const result: { date: string; total: number }[] = [];
+
+  for (const day of sortedDays) {
+    for (const r of byDay.get(day)!) {
+      balances.set(r.assetAccountId, Number(r.amount));
+    }
+    if (day >= startKey) {
+      const total = [...balances.values()].reduce((a, b) => a + b, 0);
+      result.push({ date: day, total });
+    }
+  }
+
+  // Always anchor today with currentBalance sum, so the line reaches the present
+  const todayKey = toDayKey(new Date());
+  const todayTotal = accounts.reduce((s, a) => s + Number(a.currentBalance), 0);
+  if (result.length === 0 || result[result.length - 1].date !== todayKey) {
+    result.push({ date: todayKey, total: todayTotal });
+  } else {
+    result[result.length - 1].total = todayTotal;
+  }
+
+  return result;
+}
+
 // Asset distribution grouped by AssetType (for pie chart)
 export async function fetchAssetDistribution(userId: string) {
   const accounts = await prisma.assetAccount.groupBy({
