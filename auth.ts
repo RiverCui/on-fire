@@ -117,12 +117,19 @@ export const { auth, signIn, signOut, handlers } = NextAuth({
       }
       return true;
     },
-    async jwt({ token, user }) {
+    async jwt({ token, user, trigger }) {
+      // First sign-in: capture identity from the user object and avoid a DB hit.
+      // For Credentials, `user` is the Prisma User row. For OAuth, it comes from
+      // the provider profile; `signIn` has already ensured the DB row exists.
       if (user) {
         token.id = user.id;
+        token.name = user.name;
+        token.picture = user.image;
       }
-      // 用数据库的 name/image 作为权威数据源
-      if (token.id) {
+
+      // Only re-read the DB when the caller explicitly refreshes the session
+      // (e.g. after the user edits their profile, call `update()` on the client).
+      if (trigger === 'update' && token.id) {
         const dbUser = await prisma.user.findUnique({
           where: { id: token.id as string },
           select: { name: true, image: true },
@@ -132,6 +139,7 @@ export const { auth, signIn, signOut, handlers } = NextAuth({
           token.picture = dbUser.image;
         }
       }
+
       return token;
     },
     session({ session, token }) {
