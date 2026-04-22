@@ -31,6 +31,7 @@ model User {
   firePlans       FirePlan[]
   assetAccounts   AssetAccount[]
   cashFlowRecords CashFlowRecord[]
+  conversations   Conversation[]
 }
 
 // ==========================================
@@ -136,4 +137,43 @@ enum AssetType {
 enum FlowType {
   INCOME // 收入
   EXPENSE // 支出
+}
+
+enum MessageRole {
+  USER
+  ASSISTANT
+}
+
+// ==========================================
+// AI Chat (AI 对话)
+// ==========================================
+
+model Conversation {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  title     String   @default("新对话")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  messages  Message[]
+
+  @@index([userId, updatedAt])
+}
+
+model Message {
+  id             String   @id @default(cuid())
+  conversationId String
+  conversation   Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+
+  role       MessageRole
+  content    String       @db.Text
+  toolCalls  Json?
+
+  tokensIn   Int?
+  tokensOut  Int?
+  createdAt  DateTime @default(now())
+
+  @@index([conversationId, createdAt])
 }
