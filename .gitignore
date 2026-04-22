@@ -45,5 +45,9 @@ GEMINI.md
 # vscode
 .vscode/*
 
-# docs
-/docs
+# docs：默认全忽略，仅放开设计与实现计划
+/docs/*
+!/docs/superpowers/
+/docs/superpowers/*
+!/docs/superpowers/specs/
+!/docs/superpowers/plans/
