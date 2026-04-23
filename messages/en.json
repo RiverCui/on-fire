@@ -154,6 +154,7 @@
     "simulator": {
       "title": "FIRE Simulator",
       "subtitle": "Adjust parameters to project your wealth trajectory",
+      "infoAriaLabel": "FIRE simulator help",
       "initialAssets": "Initial Assets",
       "annualIncome": "Annual Income",
       "annualExpense": "Current Expense",

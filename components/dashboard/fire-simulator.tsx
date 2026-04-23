@@ -155,6 +155,7 @@ export default function FireSimulator({ currentAssets, firePlan }: FireSimulator
               </span>
             </div>
             <Slider
+              aria-label={t(key)}
               value={[params[key]]}
               min={min}
               max={max}

@@ -3,9 +3,9 @@
 import { Progress } from '@/components/ui/progress';
 import { useState, useEffect } from 'react';
 
-export default function AnimatedProgress({ targetValue }: { targetValue: number }) {
+export default function AnimatedProgress({ targetValue, ariaLabel }: { targetValue: number; ariaLabel: string }) {
   const [progress, setProgress] = useState(0);
-  
+
   useEffect(() => {
     const timer = setTimeout(() => {
       setProgress(targetValue);
@@ -14,6 +14,6 @@ export default function AnimatedProgress({ targetValue }: { targetValue: number 
   }, [targetValue]);
 
   return (
-    <Progress value={progress} className="h-3 w-full rounded-full bg-slate-200 dark:bg-white/20" />
+    <Progress aria-label={ariaLabel} value={progress} className="h-3 w-full rounded-full bg-slate-200 dark:bg-white/20" />
   )
 }
