@@ -2,8 +2,7 @@ import 'server-only';
 import prisma from '@/lib/prisma';
 import { FlowType, AssetType } from '@/generated/prisma/client';
 
-export async function queryNetWorth(userId: string, _date?: string) {
-  // Current balance sum; date parameter reserved for future historical lookup.
+export async function queryNetWorth(userId: string) {
   const accounts = await prisma.assetAccount.findMany({
     where: { userId },
     select: { currentBalance: true },
@@ -40,7 +39,7 @@ export async function queryCashFlowSummary(
   let income = 0, expense = 0;
   for (const r of rows) {
     if (r.type === 'INCOME') income += Number(r.amount);
-    else expense += Number(r.amount);
+    else if (r.type === 'EXPENSE') expense += Number(r.amount);
   }
   return { income, expense, net: income - expense, currency: 'CNY' };
 }
@@ -75,8 +74,7 @@ export async function queryFirePlanProgress(userId: string) {
   const annualExpense = Number(plan.annualExpense);
   const target = plan.customTarget ? Number(plan.customTarget) : annualExpense * 25; // 4% rule
   const progress = target > 0 ? netWorth / target : 0;
-  const yearsToTarget =
-    plan.retirementAge - plan.currentAge; // simplified; full calc in lib/fire-calc.ts
+  const yearsToTarget = Math.max(0, plan.retirementAge - plan.currentAge);
 
   return {
     hasPlan: true,
@@ -118,7 +116,7 @@ export async function queryRecentTransactions(userId: string, args: { limit: num
   const rows = await prisma.cashFlowRecord.findMany({
     where: { userId },
     orderBy: { recordDate: 'desc' },
-    take: Math.min(args.limit, 50),
+    take: Math.max(1, Math.min(args.limit, 50)),
     select: {
       recordDate: true, type: true, amount: true, category: true, note: true,
     },
