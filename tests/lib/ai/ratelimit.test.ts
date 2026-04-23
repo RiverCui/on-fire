@@ -18,6 +18,8 @@ vi.mock('@upstash/ratelimit', () => ({
 beforeEach(() => {
   limitMinMock.mockReset();
   limitDayMock.mockReset();
+  vi.spyOn(console, 'warn').mockImplementation(() => {});
+  vi.spyOn(console, 'error').mockImplementation(() => {});
 });
 
 describe('checkChatLimit', () => {
@@ -41,5 +43,21 @@ describe('checkChatLimit', () => {
     limitDayMock.mockResolvedValue({ success: false, reset: 99 });
     const { checkChatLimit } = await import('@/lib/ai/ratelimit');
     expect(await checkChatLimit('u1')).toEqual({ ok: false, which: 'day', reset: 99 });
+  });
+
+  it('throws when userId is empty', async () => {
+    const { checkChatLimit } = await import('@/lib/ai/ratelimit');
+    await expect(checkChatLimit('')).rejects.toThrow(/userId is required/);
+  });
+
+  it('fails closed on Redis error', async () => {
+    limitMinMock.mockRejectedValue(new Error('redis down'));
+    const { checkChatLimit } = await import('@/lib/ai/ratelimit');
+    const res = await checkChatLimit('u1');
+    expect(res.ok).toBe(false);
+    if (!res.ok) {
+      expect(res.which).toBe('error');
+      expect(res.reset).toBeGreaterThan(Date.now() - 1000);
+    }
   });
 });

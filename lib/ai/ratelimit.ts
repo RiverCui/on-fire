@@ -15,16 +15,41 @@ export const perDayLimiter = new Ratelimit({
   analytics: false,
 });
 
-/**
- * Serial: min fails short-circuits day so day quota is not consumed.
- */
-export async function checkChatLimit(userId: string): Promise<
+export type LimitResult =
   | { ok: true }
-  | { ok: false; which: 'min' | 'day'; reset: number }
-> {
-  const min = await perMinuteLimiter.limit(userId);
-  if (!min.success) return { ok: false, which: 'min', reset: min.reset };
-  const day = await perDayLimiter.limit(userId);
-  if (!day.success) return { ok: false, which: 'day', reset: day.reset };
-  return { ok: true };
+  | {
+      ok: false;
+      which: 'min' | 'day' | 'error';
+      /** Unix epoch ms when the window resets. Convert for HTTP Retry-After via `Math.ceil((reset - Date.now()) / 1000)`. */
+      reset: number;
+    };
+
+/**
+ * Check per-user chat rate limit. Serial check: min fails short-circuits
+ * day so day quota is not consumed.
+ *
+ * Fail-closed policy: if Redis is unreachable, denies the request with
+ * `which: 'error'` and a 60s backoff. Rationale: prevents bypassing cost
+ * controls during transient Upstash outages.
+ */
+export async function checkChatLimit(userId: string): Promise<LimitResult> {
+  if (!userId) {
+    throw new Error('checkChatLimit: userId is required');
+  }
+  try {
+    const min = await perMinuteLimiter.limit(userId);
+    if (!min.success) {
+      console.warn('[ratelimit] min denied', { userId, reset: min.reset });
+      return { ok: false, which: 'min', reset: min.reset };
+    }
+    const day = await perDayLimiter.limit(userId);
+    if (!day.success) {
+      console.warn('[ratelimit] day denied', { userId, reset: day.reset });
+      return { ok: false, which: 'day', reset: day.reset };
+    }
+    return { ok: true };
+  } catch (err) {
+    console.error('[ratelimit] upstream error', err);
+    return { ok: false, which: 'error', reset: Date.now() + 60_000 };
+  }
 }
