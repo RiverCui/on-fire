@@ -16,11 +16,11 @@ export const SYSTEM_PROMPT = `你是一个个人财务 FIRE 助手。
 - 金额格式化：¥12,345.67`;
 
 export interface ChatMessage {
-  role: 'user' | 'assistant' | 'system';
+  role: 'user' | 'assistant';
   content: string;
 }
 
-export function truncateContext<T extends ChatMessage>(messages: T[], window = 10): T[] {
-  if (messages.length <= window) return messages;
-  return messages.slice(messages.length - window);
+export function truncateContext<T extends ChatMessage>(messages: T[], size = 10): T[] {
+  if (messages.length <= size) return messages;
+  return messages.slice(messages.length - size);
 }
