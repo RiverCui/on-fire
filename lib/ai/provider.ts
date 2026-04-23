@@ -5,8 +5,23 @@ import type { LanguageModel } from 'ai';
 
 export type AIProvider = 'deepseek' | 'anthropic' | 'openai';
 
+const DEFAULT_PROVIDER: AIProvider = 'deepseek';
+const VALID_PROVIDERS: readonly AIProvider[] = ['deepseek', 'anthropic', 'openai'];
+
+function resolveProvider(override?: AIProvider): AIProvider {
+  const raw = override ?? process.env.AI_PROVIDER ?? DEFAULT_PROVIDER;
+  if (!VALID_PROVIDERS.includes(raw as AIProvider)) {
+    throw new Error(`Unknown AI_PROVIDER: ${raw}`);
+  }
+  return raw as AIProvider;
+}
+
+/**
+ * Returns an AI SDK language model based on AI_PROVIDER env
+ * (or explicit override). Reads env at call time.
+ */
 export function getModel(override?: AIProvider): LanguageModel {
-  const provider = (override ?? process.env.AI_PROVIDER ?? 'deepseek') as AIProvider;
+  const provider = resolveProvider(override);
   switch (provider) {
     case 'deepseek':
       return deepseek('deepseek-chat');
@@ -14,11 +29,9 @@ export function getModel(override?: AIProvider): LanguageModel {
       return anthropic('claude-sonnet-4-6');
     case 'openai':
       return openai('gpt-4o-mini');
-    default:
-      throw new Error(`Unknown AI_PROVIDER: ${provider}`);
   }
 }
 
 export function getProviderName(): AIProvider {
-  return (process.env.AI_PROVIDER ?? 'deepseek') as AIProvider;
+  return resolveProvider();
 }
