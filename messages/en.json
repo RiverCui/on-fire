@@ -329,5 +329,23 @@
       "name": "Name",
       "email": "Email"
     }
+  },
+  "Chat": {
+    "title": "AI Assistant",
+    "newConversation": "New conversation",
+    "placeholderInput": "Ask anything about your finances...",
+    "send": "Send",
+    "stop": "Stop",
+    "thinking": "Thinking...",
+    "empty": "Start a new conversation",
+    "promptSuggestions": {
+      "thisMonthExpense": "How much have I spent this month?",
+      "netWorth": "What is my total net worth?",
+      "fireProgress": "How far am I from FIRE?",
+      "topCategories": "What are my top spending categories in the last 3 months?"
+    },
+    "toolCallLabel": "Tool call",
+    "deleteConfirm": "Delete this conversation?",
+    "rateLimited": "Too many requests. Please try again later."
   }
 }

@@ -329,5 +329,23 @@
       "name": "姓名",
       "email": "邮箱"
     }
+  },
+  "Chat": {
+    "title": "AI 助手",
+    "newConversation": "新对话",
+    "placeholderInput": "问我任何关于你财务状况的问题...",
+    "send": "发送",
+    "stop": "停止",
+    "thinking": "思考中...",
+    "empty": "开始一个新对话",
+    "promptSuggestions": {
+      "thisMonthExpense": "我这个月花了多少？",
+      "netWorth": "我现在总净资产是多少？",
+      "fireProgress": "我离 FIRE 还有多远？",
+      "topCategories": "过去 3 个月我花钱最多的是哪些类别？"
+    },
+    "toolCallLabel": "调用工具",
+    "deleteConfirm": "确定要删除这个对话吗？",
+    "rateLimited": "请求过于频繁，请稍后再试"
   }
 }
