@@ -29,7 +29,7 @@ export async function createConversation(title?: string) {
     data: { userId, ...(title ? { title } : {}) },
     select: { id: true },
   });
-  revalidatePath('/chat');
+  revalidatePath('/[locale]/chat', 'page');
   return conv;
 }
 
@@ -67,7 +67,7 @@ export async function deleteConversation(conversationId: string) {
   if (!conv) throw new Error('Not found');
   await prisma.conversation.delete({ where: { id: conversationId } });
   await redis.del(ctxKey(conversationId));
-  revalidatePath('/chat');
+  revalidatePath('/[locale]/chat', 'page');
 }
 
 export type MessageRecord = {
