@@ -20,7 +20,12 @@ export interface ChatMessage {
   content: string;
 }
 
-export function truncateContext<T extends ChatMessage>(messages: T[], size = 10): T[] {
+/**
+ * Keep only the last `size` messages. Generic over any message-like array
+ * so it works for both `ChatMessage` (server-side legacy) and `UIMessage`
+ * (AI SDK v6 UI-message format from `useChat`).
+ */
+export function truncateContext<T>(messages: T[], size = 10): T[] {
   if (messages.length <= size) return messages;
   return messages.slice(messages.length - size);
 }
