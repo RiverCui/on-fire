@@ -13,6 +13,7 @@ import { redis } from '@/lib/redis';
 import { ctxKey, respKey, hashMessages, jitterSeconds } from '@/lib/redis/cache';
 import { persistAssistantMessage } from '@/lib/ai/persist';
 import prisma from '@/lib/prisma';
+import { Prisma } from '@/generated/prisma/client';
 
 export const runtime = 'nodejs';
 export const maxDuration = 60;
@@ -79,37 +80,41 @@ export async function POST(req: Request) {
     tools: buildTools(userId),
     stopWhen: stepCountIs(5),
     onFinish: async ({ text, usage, toolCalls }) => {
-      // 6a. Persist user + assistant messages atomically.
-      await persistAssistantMessage({
-        conversationId,
-        userText,
-        assistantText: text,
-        toolCalls: toolCalls ?? null,
-        tokensIn: usage?.inputTokens,
-        tokensOut: usage?.outputTokens,
-      });
+      try {
+        await persistAssistantMessage({
+          conversationId,
+          userId,
+          userText,
+          assistantText: text,
+          toolCalls: (toolCalls as unknown) as Prisma.InputJsonValue | null,
+          tokensIn: usage?.inputTokens,
+          tokensOut: usage?.outputTokens,
+        });
+      } catch (err) {
+        console.error('[chat] persist failed', { conversationId, err });
+      }
 
-      // 6b. Educational: write LLM response cache with jitter TTL.
-      // Demonstrates 雪崩/抖动 TTL pattern. READ path lands in Task 20.
-      const flatForHash = windowed.map((m) => ({
-        role: m.role,
-        content:
-          m.parts
-            ?.map((p: { type: string; text?: string }) =>
-              p.type === 'text' ? p.text ?? '' : '',
-            )
-            .join('') ?? '',
-      }));
-      const cacheKey = respKey(
-        hashMessages([
-          { role: 'system', content: getProviderName() },
-          ...flatForHash,
-        ]),
-      );
-      await redis.set(cacheKey, text, { ex: jitterSeconds(3600) });
+      // Educational: write LLM response cache with jitter TTL.
+      // TODO(Task 20): cache READ path needs UI-message-stream replay format.
+      try {
+        const flatForHash = windowed.map((m) => ({
+          role: m.role,
+          content: m.parts?.map((p: { type: string; text?: string }) =>
+            p.type === 'text' ? p.text ?? '' : '').join('') ?? '',
+        }));
+        const cacheKey = respKey(
+          hashMessages([{ role: 'system', content: getProviderName() }, ...flatForHash]),
+        );
+        await redis.set(cacheKey, text, { ex: jitterSeconds(3600) });
+      } catch (err) {
+        console.warn('[chat] response cache write failed', err);
+      }
 
-      // 6c. Invalidate context cache so next read fetches fresh from DB.
-      await redis.del(ctxKey(conversationId));
+      try {
+        await redis.del(ctxKey(conversationId));
+      } catch (err) {
+        console.warn('[chat] ctx cache invalidate failed', err);
+      }
     },
   });
 

@@ -25,7 +25,7 @@ export interface ChatMessage {
  * so it works for both `ChatMessage` (server-side legacy) and `UIMessage`
  * (AI SDK v6 UI-message format from `useChat`).
  */
-export function truncateContext<T>(messages: T[], size = 10): T[] {
+export function truncateContext<T extends { role: string }>(messages: T[], size = 10): T[] {
   if (messages.length <= size) return messages;
   return messages.slice(messages.length - size);
 }
