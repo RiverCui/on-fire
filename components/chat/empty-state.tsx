@@ -14,17 +14,24 @@ export function EmptyState({ onPick }: { onPick: (text: string) => void }) {
   ];
 
   return (
-    <div className="flex h-full flex-col items-center justify-center gap-6 p-8 text-center">
-      <div className="flex items-center gap-2 text-xl font-semibold">
-        <Sparkles className="h-5 w-5" />
-        {tChat('empty')}
+    <div className="flex h-full flex-col items-center justify-center gap-8 p-10 text-center">
+      <div className="flex flex-col items-center gap-3">
+        <div className="flex h-14 w-14 items-center justify-center rounded-2xl border border-slate-200/80 bg-white/80 text-slate-900 shadow-sm backdrop-blur-xl dark:border-white/10 dark:bg-white/5 dark:text-white">
+          <Sparkles className="h-6 w-6" />
+        </div>
+        <h2 className="text-2xl font-semibold text-slate-900 dark:text-white">
+          {tChat('empty')}
+        </h2>
+        <p className="text-sm text-slate-500 dark:text-white/60">
+          {tChat('placeholderInput')}
+        </p>
       </div>
-      <div className="grid max-w-xl gap-2 sm:grid-cols-2">
+      <div className="grid w-full max-w-2xl gap-3 sm:grid-cols-2">
         {suggestions.map((s) => (
           <button
             key={s.key}
             onClick={() => onPick(s.text)}
-            className="rounded-md border bg-background px-3 py-2 text-left text-sm hover:bg-accent"
+            className="rounded-2xl border border-slate-200/80 bg-white/80 px-5 py-4 text-left text-sm text-slate-700 shadow-sm backdrop-blur-xl transition hover:border-slate-300 hover:bg-slate-50 hover:text-slate-900 dark:border-white/10 dark:bg-white/5 dark:text-white/80 dark:hover:border-white/20 dark:hover:bg-white/10 dark:hover:text-white"
           >
             {s.text}
           </button>
