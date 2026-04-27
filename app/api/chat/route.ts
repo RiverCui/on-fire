@@ -5,12 +5,12 @@ import {
   type UIMessage,
 } from 'ai';
 import { auth } from '@/auth';
-import { getModel, getProviderName } from '@/lib/ai/provider';
+import { getModel } from '@/lib/ai/provider';
 import { buildTools } from '@/lib/ai/tools';
 import { SYSTEM_PROMPT, truncateContext } from '@/lib/ai/prompt';
 import { checkChatLimit } from '@/lib/ai/ratelimit';
 import { redis } from '@/lib/redis';
-import { ctxKey, respKey, hashMessages, jitterSeconds } from '@/lib/redis/cache';
+import { ctxKey } from '@/lib/redis/cache';
 import { persistAssistantMessage } from '@/lib/ai/persist';
 import prisma from '@/lib/prisma';
 import { Prisma } from '@/generated/prisma/client';
@@ -42,7 +42,13 @@ export async function POST(req: Request) {
     });
   }
 
-  const { messages, conversationId } = (await req.json()) as IncomingBody;
+  let body: IncomingBody;
+  try {
+    body = (await req.json()) as IncomingBody;
+  } catch {
+    return new Response('invalid json', { status: 400 });
+  }
+  const { messages, conversationId } = body;
 
   // 3. Ownership check — conversation must belong to current user.
   const conv = await prisma.conversation.findFirst({
@@ -63,12 +69,7 @@ export async function POST(req: Request) {
       )
       .join('') ?? '';
 
-  // NOTE: Cache READ path is intentionally skipped for now.
-  // The plan returns cached text as `text/plain`, but `useChat` +
-  // `DefaultChatTransport` expect an AI SDK v6 UI-message stream (SSE).
-  // TODO(Task 20): replay cache hits in UI-message-stream format so they
-  // are compatible with `useChat`. For now we keep the cache WRITE in
-  // `onFinish` to preserve the jitter-TTL educational example.
+  // Future: response cache (semantic / Anthropic prompt cache) — see interview-notes.
 
   // 5. Stream from the LLM with tools wired in.
   // `convertToModelMessages` is async in AI SDK v6.
@@ -79,35 +80,19 @@ export async function POST(req: Request) {
     messages: modelMessages,
     tools: buildTools(userId),
     stopWhen: stepCountIs(5),
-    onFinish: async ({ text, usage, toolCalls }) => {
+    onFinish: async ({ text: assistantText, usage, toolCalls }) => {
       try {
         await persistAssistantMessage({
           conversationId,
           userId,
           userText,
-          assistantText: text,
+          assistantText,
           toolCalls: (toolCalls as unknown) as Prisma.InputJsonValue | null,
           tokensIn: usage?.inputTokens,
           tokensOut: usage?.outputTokens,
         });
       } catch (err) {
         console.error('[chat] persist failed', { conversationId, err });
-      }
-
-      // Educational: write LLM response cache with jitter TTL.
-      // TODO(Task 20): cache READ path needs UI-message-stream replay format.
-      try {
-        const flatForHash = windowed.map((m) => ({
-          role: m.role,
-          content: m.parts?.map((p: { type: string; text?: string }) =>
-            p.type === 'text' ? p.text ?? '' : '').join('') ?? '',
-        }));
-        const cacheKey = respKey(
-          hashMessages([{ role: 'system', content: getProviderName() }, ...flatForHash]),
-        );
-        await redis.set(cacheKey, text, { ex: jitterSeconds(3600) });
-      } catch (err) {
-        console.warn('[chat] response cache write failed', err);
       }
 
       try {

@@ -1,5 +1,10 @@
 import { Ratelimit } from '@upstash/ratelimit';
+import { createHash } from 'node:crypto';
 import { redis } from '@/lib/redis';
+
+function hashId(id: string): string {
+  return createHash('sha256').update(id).digest('hex').slice(0, 8);
+}
 
 export const perMinuteLimiter = new Ratelimit({
   redis,
@@ -39,17 +44,17 @@ export async function checkChatLimit(userId: string): Promise<LimitResult> {
   try {
     const min = await perMinuteLimiter.limit(userId);
     if (!min.success) {
-      console.warn('[ratelimit] min denied', { userId, reset: min.reset });
+      console.warn('[ratelimit] min denied', { userId: hashId(userId), reset: min.reset });
       return { ok: false, which: 'min', reset: min.reset };
     }
     const day = await perDayLimiter.limit(userId);
     if (!day.success) {
-      console.warn('[ratelimit] day denied', { userId, reset: day.reset });
+      console.warn('[ratelimit] day denied', { userId: hashId(userId), reset: day.reset });
       return { ok: false, which: 'day', reset: day.reset };
     }
     return { ok: true };
   } catch (err) {
-    console.error('[ratelimit] upstream error', err);
+    console.error('[ratelimit] upstream error', { userId: hashId(userId), err });
     return { ok: false, which: 'error', reset: Date.now() + 60_000 };
   }
 }
