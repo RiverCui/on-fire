@@ -9,5 +9,5 @@ export default async function ChatIndex({
   const { locale } = await params;
   const convs = await listConversations();
   const target = convs[0]?.id ?? (await createConversation()).id;
-  redirect(`/${locale}/chat/${target}`);
+  redirect(`/${locale}/dashboard/chat/${target}`);
 }

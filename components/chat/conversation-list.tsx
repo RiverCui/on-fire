@@ -9,7 +9,7 @@ export async function ConversationList({ conversations }: { conversations: Conv[
   return (
     <div className="flex flex-col gap-1 p-2">
       <Link
-        href="/chat"
+        href="/dashboard/chat"
         className="rounded-md px-3 py-2 text-sm font-medium bg-primary text-primary-foreground hover:opacity-90"
       >
         + {t('newConversation')}

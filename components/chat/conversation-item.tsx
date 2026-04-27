@@ -19,7 +19,7 @@ export function ConversationItem({ id, title }: { id: string; title: string }) {
     if (!confirm(t('deleteConfirm'))) return;
     start(async () => {
       await deleteConversation(id);
-      router.push(`/${params.locale}/chat`);
+      router.push(`/${params.locale}/dashboard/chat`);
     });
   };
 
@@ -30,7 +30,7 @@ export function ConversationItem({ id, title }: { id: string; title: string }) {
         active ? 'bg-accent' : 'hover:bg-accent/50',
       )}
     >
-      <Link href={`/${params.locale}/chat/${id}`} className="truncate flex-1">
+      <Link href={`/${params.locale}/dashboard/chat/${id}`} className="truncate flex-1">
         {title}
       </Link>
       <button
