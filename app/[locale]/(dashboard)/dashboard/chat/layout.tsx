@@ -7,7 +7,7 @@ export default async function ChatLayout({ children }: { children: ReactNode }) 
   const t = await getTranslations('Chat');
   const conversations = await listConversations();
   return (
-    <div className="flex h-[calc(100vh-4rem)] w-full gap-4">
+    <div className="flex h-full w-full gap-4">
       <main className="flex flex-1 flex-col overflow-hidden rounded-3xl border border-slate-200/80 bg-white/70 shadow-sm backdrop-blur-xl dark:border-white/10 dark:bg-white/5">
         {children}
       </main>
