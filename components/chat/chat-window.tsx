@@ -1,5 +1,6 @@
 'use client';
 
+import { useMemo } from 'react';
 import { useChat } from '@ai-sdk/react';
 import { DefaultChatTransport, type UIMessage } from 'ai';
 import { MessageList } from './message-list';
@@ -12,11 +13,17 @@ type Props = {
 };
 
 export function ChatWindow({ conversationId, initialMessages }: Props) {
+  const transport = useMemo(
+    () =>
+      new DefaultChatTransport({
+        api: '/api/chat',
+        body: { conversationId },
+      }),
+    [conversationId],
+  );
+
   const { messages, sendMessage, stop, status } = useChat({
-    transport: new DefaultChatTransport({
-      api: '/api/chat',
-      body: { conversationId },
-    }),
+    transport,
     messages: initialMessages,
   });
 
