@@ -1,9 +1,9 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
 import type { UIMessage } from 'ai';
 import { useTranslations } from 'next-intl';
 import { MessageBubble } from './message-bubble';
+import { useScrollToBottom } from '@/hooks/use-scroll-to-bottom';
 
 export function MessageList({
   messages,
@@ -13,11 +13,7 @@ export function MessageList({
   streaming: boolean;
 }) {
   const t = useTranslations('Chat');
-  const endRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    endRef.current?.scrollIntoView({ behavior: 'smooth' });
-  }, [messages, streaming]);
+  const endRef = useScrollToBottom(messages, streaming);
 
   return (
     <div className="flex flex-col gap-4 px-4 py-6 sm:px-6">
