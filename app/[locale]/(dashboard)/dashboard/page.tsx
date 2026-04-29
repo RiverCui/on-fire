@@ -61,10 +61,13 @@ export default async function Page() {
         <div className="mb-4 flex items-start justify-between">
           <div>
             <p className="text-sm text-slate-500 dark:text-white/60">{t('simulator.title')}</p>
-            <h3 className="text-sm text-slate-600 dark:text-white/70">{t('simulator.subtitle')}</h3>
+            <h2 className="text-sm text-slate-600 dark:text-white/70">{t('simulator.subtitle')}</h2>
           </div>
           <div className="group relative">
-            <button className="rounded-full p-1.5 text-slate-400 transition-colors hover:bg-slate-100 hover:text-slate-600 dark:text-white/40 dark:hover:bg-white/10 dark:hover:text-white/80">
+            <button
+              aria-label={t('simulator.infoAriaLabel')}
+              className="rounded-full p-1.5 text-slate-400 transition-colors hover:bg-slate-100 hover:text-slate-600 dark:text-white/40 dark:hover:bg-white/10 dark:hover:text-white/80"
+            >
               <Info className="h-5 w-5" />
             </button>
             <div className="pointer-events-none absolute right-0 top-full z-50 mt-2 w-80 rounded-xl border border-slate-200 bg-white/95 p-4 text-sm leading-relaxed text-slate-600 opacity-0 shadow-lg backdrop-blur-xl transition-opacity group-hover:pointer-events-auto group-hover:opacity-100 dark:border-white/10 dark:bg-slate-900/95 dark:text-white/70">
@@ -112,7 +115,7 @@ export default async function Page() {
             </div>
             <span className="rounded-full bg-slate-900 px-3 py-1 text-xs text-white shadow-sm dark:bg-white/90 dark:text-slate-900">{t('progressSection.badge')}</span>
           </div>
-          <AnimatedProgress targetValue={progress.progressValue} />
+          <AnimatedProgress targetValue={progress.progressValue} ariaLabel={t('progressSection.title')} />
           <div className="flex flex-wrap gap-6 text-sm text-slate-600 dark:text-white/70">
             <div>
               <p className="text-xs uppercase tracking-wide text-slate-500 dark:text-white/50">{t('progressSection.fields.accumulated')}</p>

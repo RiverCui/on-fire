@@ -3,6 +3,7 @@
     "overview": "Overview",
     "account": "Asset Account",
     "cashflow": "Cash Flow",
+    "chat": "AI Assistant",
     "settings": "Settings"
   },
   "LocaleLayout": {
@@ -154,6 +155,7 @@
     "simulator": {
       "title": "FIRE Simulator",
       "subtitle": "Adjust parameters to project your wealth trajectory",
+      "infoAriaLabel": "FIRE simulator help",
       "initialAssets": "Initial Assets",
       "annualIncome": "Annual Income",
       "annualExpense": "Current Expense",
@@ -328,5 +330,25 @@
       "name": "Name",
       "email": "Email"
     }
+  },
+  "Chat": {
+    "title": "AI Assistant",
+    "newConversation": "New conversation",
+    "compactMode": "Compact",
+    "defaultMode": "Default",
+    "placeholderInput": "Ask anything about your finances...",
+    "send": "Send",
+    "stop": "Stop",
+    "thinking": "Thinking...",
+    "empty": "Start a new conversation",
+    "promptSuggestions": {
+      "thisMonthExpense": "How much have I spent this month?",
+      "netWorth": "What is my total net worth?",
+      "fireProgress": "How far am I from FIRE?",
+      "topCategories": "What are my top spending categories in the last 3 months?"
+    },
+    "toolCallLabel": "Tool call",
+    "deleteConfirm": "Delete this conversation?",
+    "rateLimited": "Too many requests. Please try again later."
   }
 }

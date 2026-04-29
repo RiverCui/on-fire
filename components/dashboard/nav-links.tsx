@@ -1,7 +1,7 @@
 "use client";
 
 import { Link, usePathname } from "@/i18n/navigation";
-import { BarChart3, Settings, Wallet, TrendingUp } from "lucide-react";
+import { BarChart3, Settings, Wallet, TrendingUp, Sparkles } from "lucide-react";
 import { useTranslations } from 'next-intl';
 import { cn } from "@/lib/utils";
 
@@ -23,6 +23,11 @@ export default function NavLinks() {
 			label: t('cashflow'),
 			icon: TrendingUp,
 			href: "/dashboard/cashflow",
+		},
+		{
+			label: t('chat'),
+			icon: Sparkles,
+			href: "/dashboard/chat",
 		},
 		{
 			label: t('settings'),

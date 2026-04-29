@@ -1,18 +1,25 @@
 import { PrismaClient } from '@/generated/prisma/client';
 import { PrismaPg } from '@prisma/adapter-pg';
 
-const globalForPrisma = global as unknown as {
-  prisma: PrismaClient
+declare global {
+  // eslint-disable-next-line no-var
+  var __prisma: PrismaClient | undefined;
 }
 
-const adapter = new PrismaPg({
-  connectionString: process.env.DATABASE_URL,
-})
+function createPrisma(): PrismaClient {
+  const connectionString = process.env.DATABASE_URL;
+  if (!connectionString) {
+    throw new Error('Missing DATABASE_URL');
+  }
+  return new PrismaClient({
+    adapter: new PrismaPg({ connectionString }),
+  });
+}
 
-const prisma = globalForPrisma.prisma || new PrismaClient({
-  adapter,
-})
+const prisma = globalThis.__prisma ?? createPrisma();
 
-if (process.env.NODE_ENV !== 'production') globalForPrisma.prisma = prisma;
+if (process.env.NODE_ENV !== 'production') {
+  globalThis.__prisma = prisma;
+}
 
 export default prisma;
