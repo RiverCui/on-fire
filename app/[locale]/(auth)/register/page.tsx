@@ -2,6 +2,7 @@ import Image from 'next/image';
 import { BarChart3, ArrowLeftRight, Flame, Shield } from 'lucide-react';
 import AuthForm from '@/components/auth/auth-form';
 import { getTranslations } from 'next-intl/server';
+import iconImage from '@/app/icon.png';
 
 const featureIcons = [BarChart3, ArrowLeftRight, Flame, Shield] as const;
 const featureKeys = ['assets', 'cashflow', 'fire', 'security'] as const;
@@ -14,7 +15,7 @@ export default async function RegisterPage() {
       <div className="flex flex-col space-y-8">
         {/* Brand */}
         <div className="flex items-center gap-3">
-          <Image src="/icon.png" alt="" width={44} height={44} className="rounded-xl shadow-lg shadow-black/20" />
+          <Image src={iconImage} alt="" width={44} height={44} className="rounded-xl shadow-lg shadow-black/20" />
           <span className="font-display text-xl tracking-[0.08em] text-slate-800 dark:text-white/90">
             {brand('name')}
           </span>

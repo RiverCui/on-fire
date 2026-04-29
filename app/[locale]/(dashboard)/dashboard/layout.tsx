@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import ThemeToggle from '@/components/ui/theme-toggle';
 import SideNav from '@/components/dashboard/sidenav';
 import LangSwitcher from '@/components/dashboard/lang-switcher';
+import iconImage from '@/app/icon.png';
 
 type DashboardLayoutProps = {
   children: ReactNode;
@@ -22,7 +23,7 @@ export default async function Layout({ children }: DashboardLayoutProps) {
       {/* 侧边栏 */}
       <aside className="relative z-10 hidden h-screen flex-shrink-0 border-r border-slate-200/80 bg-white/80 backdrop-blur-xl md:flex md:w-64 md:flex-col dark:border-white/10 dark:bg-white/5">
         <div className="flex h-16 items-center gap-3 border-b border-slate-200/80 px-6 dark:border-white/10">
-          <Image src="/icon.png" alt="FIRE Master" width={32} height={32} />
+          <Image src={iconImage} alt="FIRE Master" width={32} height={32} />
           <div>
             <p className="text-base font-semibold text-slate-900 dark:text-white">{t('brandName')}</p>
             <p className="text-[10px] uppercase tracking-widest text-slate-400 dark:text-white/40">{t('brandSubtitle')}</p>
