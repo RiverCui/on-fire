@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef, useReducer } from 'react';
+import { useEffect, useRef, useReducer, useImperativeHandle } from 'react';
 import { SendHorizontal, Square } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { Button } from '@/components/ui/button';
@@ -10,6 +10,11 @@ type Props = {
   onStop: () => void;
   streaming: boolean;
   disabled?: boolean;
+  ref?: React.Ref<ChatInputHandle>;
+};
+
+export type ChatInputHandle = {
+  focus: () => void;
 };
 
 type State = {
@@ -70,8 +75,15 @@ function reducer(state: State, action: Action): State {
   }
 }
 
-export function ChatInput({ onSend, onStop, streaming, disabled }: Props) {
+export function ChatInput({ onSend, onStop, streaming, disabled, ref }: Props) {
   const inputRef = useRef<HTMLTextAreaElement>(null);
+  useImperativeHandle(
+    ref,
+    () => ({
+      focus: () => inputRef.current?.focus(),
+    }),
+    []
+  )
   useEffect(() => {
     inputRef.current?.focus();
   }, []);

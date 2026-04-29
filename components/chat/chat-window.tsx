@@ -1,12 +1,12 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useRef, useEffect } from 'react';
 import { useChat } from '@ai-sdk/react';
 import { DefaultChatTransport, type UIMessage } from 'ai';
 import { useTranslations } from 'next-intl';
 import { Rows3, Rows2 } from 'lucide-react';
 import { MessageList } from './message-list';
-import { ChatInput } from './chat-input';
+import { ChatInput, type ChatInputHandle } from './chat-input';
 import { EmptyState } from './empty-state';
 import { ChatThemeContext, type ChatTheme } from './chat-theme-context';
 
@@ -35,6 +35,16 @@ export function ChatWindow({ conversationId, initialMessages }: Props) {
   const streaming = status === 'submitted' || status === 'streaming';
   const isCompact = theme === 'compact';
 
+  const inputHandleRef = useRef<ChatInputHandle>(null);
+
+  const prevStreamingRef = useRef(streaming);
+  useEffect(() => {
+    if (prevStreamingRef.current && !streaming) {
+      inputHandleRef.current?.focus();
+    }
+    prevStreamingRef.current = streaming;
+  }, [streaming]);
+
   return (
     <ChatThemeContext.Provider value={theme}>
       <div className="flex h-full flex-col">
@@ -58,6 +68,7 @@ export function ChatWindow({ conversationId, initialMessages }: Props) {
           )}
         </div>
         <ChatInput
+          ref={inputHandleRef}
           onSend={(text) => sendMessage({ text })}
           onStop={stop}
           streaming={streaming}
