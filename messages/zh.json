@@ -7,8 +7,8 @@
     "settings": "设置"
   },
   "LocaleLayout": {
-    "title": "复利岛 Dashboard",
-    "description": "复利岛 Dashboard Overview"
+    "title": "FIRE 大师 — 你的财务自由仪表盘",
+    "description": "追踪资产、现金流与 FIRE 进度"
   },
   "AuthForm": {
     "titles": {
@@ -44,8 +44,8 @@
     }
   },
   "DashboardLayout": {
-    "brandName": "复利岛",
-    "brandSubtitle": "CompIsle",
+    "brandName": "FIRE 大师",
+    "brandSubtitle": "FIRE Master",
     "brandTagline": "掌控资产 · 量化自由",
     "dailyMetricsTitle": "今日 FIRE 指标",
     "dailyMetricsSubtitle": "记录今日储蓄率，保持复利节奏。",
@@ -192,11 +192,11 @@
     }
   },
   "AuthBrand": {
-    "name": "复利岛"
+    "name": "FIRE 大师"
   },
   "AuthLoginPage": {
-    "heading": "你的复利岛",
-    "description": "一款借助复利力量的个人财务工具 — 追踪资产、管理现金流，模拟你的财务自由之路。",
+    "heading": "开启你的 FIRE 之路",
+    "description": "FIRE（财务独立、提前退休）的个人财务驾驶舱 — 追踪资产、管理现金流，量化你的自由之路。",
     "features": {
       "assets": { "title": "资产追踪", "desc": "实时监控账户、配置与净资产变化。" },
       "cashflow": { "title": "现金流", "desc": "记录收支，可视化趋势变化。" },
@@ -205,8 +205,8 @@
     }
   },
   "AuthRegisterPage": {
-    "heading": "你的复利岛",
-    "description": "一款借助复利力量的个人财务工具 — 追踪资产、管理现金流，模拟你的财务自由之路。",
+    "heading": "开启你的 FIRE 之路",
+    "description": "FIRE（财务独立、提前退休）的个人财务驾驶舱 — 追踪资产、管理现金流，量化你的自由之路。",
     "features": {
       "assets": { "title": "资产追踪", "desc": "实时监控账户、配置与净资产变化。" },
       "cashflow": { "title": "现金流", "desc": "记录收支，可视化趋势变化。" },

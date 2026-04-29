@@ -7,8 +7,8 @@
     "settings": "Settings"
   },
   "LocaleLayout": {
-    "title": "CompIsle Dashboard",
-    "description": "CompIsle dashboard overview"
+    "title": "FIRE Master — Your Financial Independence Dashboard",
+    "description": "Track assets, cash flow, and your path to FIRE"
   },
   "AuthForm": {
     "titles": {
@@ -44,7 +44,7 @@
     }
   },
   "DashboardLayout": {
-    "brandName": "CompIsle",
+    "brandName": "FIRE Master",
     "brandSubtitle": "Compound Isle",
     "brandTagline": "Own your assets · Quantify freedom",
     "dailyMetricsTitle": "Today's FIRE snapshot",
@@ -192,11 +192,11 @@
     }
   },
   "AuthBrand": {
-    "name": "CompIsle"
+    "name": "FIRE Master"
   },
   "AuthLoginPage": {
-    "heading": "Your Compound Interest Island",
-    "description": "A personal finance tool to harness the power of compound interest — track assets, manage cash flow, and simulate your path to financial independence.",
+    "heading": "Start Your FIRE Journey",
+    "description": "Your personal cockpit for FIRE (Financial Independence, Retire Early) — track assets, manage cash flow, and quantify your path to freedom.",
     "features": {
       "assets": { "title": "Asset Tracking", "desc": "Monitor accounts, allocations, and net worth in real time." },
       "cashflow": { "title": "Cash Flow", "desc": "Record income and expenses, visualize trends over time." },
@@ -205,8 +205,8 @@
     }
   },
   "AuthRegisterPage": {
-    "heading": "Your Compound Interest Island",
-    "description": "A personal finance tool to harness the power of compound interest — track assets, manage cash flow, and simulate your path to financial independence.",
+    "heading": "Start Your FIRE Journey",
+    "description": "Your personal cockpit for FIRE (Financial Independence, Retire Early) — track assets, manage cash flow, and quantify your path to freedom.",
     "features": {
       "assets": { "title": "Asset Tracking", "desc": "Monitor accounts, allocations, and net worth in real time." },
       "cashflow": { "title": "Cash Flow", "desc": "Record income and expenses, visualize trends over time." },
