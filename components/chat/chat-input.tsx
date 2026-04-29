@@ -5,16 +5,16 @@ import { SendHorizontal, Square } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { Button } from '@/components/ui/button';
 
+export type ChatInputHandle = {
+  focus: () => void;
+};
+
 type Props = {
   onSend: (text: string) => void;
   onStop: () => void;
   streaming: boolean;
   disabled?: boolean;
   ref?: React.Ref<ChatInputHandle>;
-};
-
-export type ChatInputHandle = {
-  focus: () => void;
 };
 
 type State = {
@@ -35,7 +35,7 @@ function reducer(state: State, action: Action): State {
   switch (action.type) {
     case 'TYPE': {
       return { ...state, value: action.value, historyIndex: -1 };  // 用户打字：更新 value，退出历史模式（historyIndex 重置 -1）
-    };
+    }
     case 'SUBMIT': {
       const trimmed = state.value.trim();
       if (!trimmed) return state;  // 空消息不处理
@@ -45,7 +45,7 @@ function reducer(state: State, action: Action): State {
         value: '',
         historyIndex: -1,
       };
-    };
+    }
     case 'HISTORY_PREV': {
       if (state.history.length === 0) return state;
       if (state.historyIndex === 0) return state;
@@ -57,7 +57,7 @@ function reducer(state: State, action: Action): State {
         value: state.history[prevIndex],
         historyIndex: prevIndex,
       };
-    };
+    }
     case 'HISTORY_NEXT': {
       if (state.historyIndex < 0) return state; // 还没开始历史模式，不处理
       const nextIndex = state.historyIndex >= state.history.length - 1
@@ -68,7 +68,7 @@ function reducer(state: State, action: Action): State {
         value: nextIndex === -1 ? '' : state.history[nextIndex],
         historyIndex: nextIndex,
       };
-    };
+    }
     default: {
       return state;
     }
