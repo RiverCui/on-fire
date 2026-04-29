@@ -334,6 +334,8 @@
   "Chat": {
     "title": "AI 助手",
     "newConversation": "新对话",
+    "compactMode": "紧凑模式",
+    "defaultMode": "默认模式",
     "placeholderInput": "问我任何关于你财务状况的问题...",
     "send": "发送",
     "stop": "停止",

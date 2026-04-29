@@ -28,9 +28,10 @@ const initial: State = { value: '', history: [], historyIndex: -1 };
 
 function reducer(state: State, action: Action): State {
   switch (action.type) {
-    case 'TYPE':
+    case 'TYPE': {
       return { ...state, value: action.value, historyIndex: -1 };  // 用户打字：更新 value，退出历史模式（historyIndex 重置 -1）
-    case 'SUBMIT':
+    };
+    case 'SUBMIT': {
       const trimmed = state.value.trim();
       if (!trimmed) return state;  // 空消息不处理
       return {
@@ -39,7 +40,8 @@ function reducer(state: State, action: Action): State {
         value: '',
         historyIndex: -1,
       };
-    case 'HISTORY_PREV':
+    };
+    case 'HISTORY_PREV': {
       if (state.history.length === 0) return state;
       if (state.historyIndex === 0) return state;
       const prevIndex = state.historyIndex < 0
@@ -50,18 +52,21 @@ function reducer(state: State, action: Action): State {
         value: state.history[prevIndex],
         historyIndex: prevIndex,
       };
-    case 'HISTORY_NEXT':
+    };
+    case 'HISTORY_NEXT': {
       if (state.historyIndex < 0) return state; // 还没开始历史模式，不处理
       const nextIndex = state.historyIndex >= state.history.length - 1
         ? -1
         : state.historyIndex + 1;
-        return {
-          ...state,
-          value: nextIndex === -1 ? '' : state.history[nextIndex],
-          historyIndex: nextIndex,
-        };
-    default:
+      return {
+        ...state,
+        value: nextIndex === -1 ? '' : state.history[nextIndex],
+        historyIndex: nextIndex,
+      };
+    };
+    default: {
       return state;
+    }
   }
 }
 

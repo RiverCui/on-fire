@@ -334,6 +334,8 @@
   "Chat": {
     "title": "AI Assistant",
     "newConversation": "New conversation",
+    "compactMode": "Compact",
+    "defaultMode": "Default",
     "placeholderInput": "Ask anything about your finances...",
     "send": "Send",
     "stop": "Stop",
