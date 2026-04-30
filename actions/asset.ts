@@ -5,6 +5,7 @@ import { z } from 'zod';
 import { auth } from '@/auth';
 import prisma from '@/lib/prisma';
 import { AssetType } from '@/generated/prisma/client';
+import { invalidateNetWorthTrend } from '@/lib/redis/asset-trend-cache';
 
 const ASSET_TYPES = Object.values(AssetType) as [string, ...string[]];
 
@@ -58,6 +59,7 @@ export async function createAssetAccount(
     });
   });
 
+  await invalidateNetWorthTrend(userId);
   revalidatePath('/dashboard/account');
   revalidatePath('/dashboard');
   return { success: true, message: 'Account created.' };
@@ -132,6 +134,9 @@ export async function updateAssetAccount(
     }
   });
 
+  if (balanceChanged) {
+    await invalidateNetWorthTrend(userId);
+  }
   revalidatePath('/dashboard/account');
   revalidatePath('/dashboard');
   return { success: true, message: 'Account updated.' };
@@ -150,6 +155,7 @@ export async function deleteAssetAccount(id: string): Promise<AssetActionState> 
   // AssetRecord rows are removed via onDelete: Cascade
   await prisma.assetAccount.delete({ where: { id } });
 
+  await invalidateNetWorthTrend(userId);
   revalidatePath('/dashboard/account');
   revalidatePath('/dashboard');
   return { success: true, message: 'Account deleted.' };

@@ -1,7 +1,8 @@
 import { ArrowUpRight, Info, PiggyBank, Wallet, Zap } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
 import { auth } from '@/auth';
-import { /* fetchAssetDistribution, */ fetchDashboardMetrics, fetchFirePlan, /* fetchMonthlyCashFlowTrend, */ fetchNetWorthTrend, fetchRecentCashFlows } from '@/lib/data';
+import { /* fetchAssetDistribution, */ fetchDashboardMetrics, fetchFirePlan, /* fetchMonthlyCashFlowTrend, */ fetchRecentCashFlows } from '@/lib/data';
+import { getCachedNetWorthTrend } from '@/lib/redis/asset-trend-cache';
 import AnimatedProgress from '@/components/dashboard/animated-progress';
 import NetWorthLineChart from '@/components/dashboard/charts/net-worth-line-chart';
 // import AssetPieChart from '@/components/dashboard/charts/asset-pie-chart';
@@ -24,7 +25,7 @@ export default async function Page() {
     fetchFirePlan(userId),
     fetchDashboardMetrics(userId),
     fetchRecentCashFlows(userId, 5),
-    fetchNetWorthTrend(userId, '1Y'),
+    getCachedNetWorthTrend(userId, '1Y'),
     // fetchAssetDistribution(userId),
     // fetchMonthlyCashFlowTrend(userId, 6),
   ]);
