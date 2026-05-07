@@ -1,5 +1,5 @@
 import { PrismaClient } from '@/generated/prisma/client';
-import { PrismaPg } from '@prisma/adapter-pg';
+import { PrismaNeon } from '@prisma/adapter-neon';
 
 declare global {
   // eslint-disable-next-line no-var
@@ -12,7 +12,7 @@ function createPrisma(): PrismaClient {
     throw new Error('Missing DATABASE_URL');
   }
   return new PrismaClient({
-    adapter: new PrismaPg({ connectionString }),
+    adapter: new PrismaNeon({ connectionString }),
   });
 }
 

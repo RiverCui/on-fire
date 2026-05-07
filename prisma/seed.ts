@@ -1,12 +1,12 @@
 import { PrismaClient } from '@/generated/prisma/client';
-import { PrismaPg } from '@prisma/adapter-pg';
+import { PrismaNeon } from '@prisma/adapter-neon';
 import { config } from 'dotenv';
 import bcrypt from 'bcrypt';
 
 // 加载环境变量
 config();
 
-const adapter = new PrismaPg({
+const adapter = new PrismaNeon({
 	connectionString: process.env.DATABASE_URL,
 });
 
