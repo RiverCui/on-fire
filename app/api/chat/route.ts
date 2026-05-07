@@ -4,6 +4,7 @@ import {
   stepCountIs,
   type UIMessage,
 } from 'ai';
+import { z } from 'zod';
 import { auth } from '@/auth';
 import { getModel, isAIProvider } from '@/lib/ai/provider';
 import { buildTools } from '@/lib/ai/tools';
@@ -19,10 +20,30 @@ import { Prisma } from '@/generated/prisma/client';
 export const runtime = 'nodejs';
 export const maxDuration = 60;
 
-type IncomingBody = {
-  messages: UIMessage[];
-  conversationId: string;
-};
+// Lightweight runtime validation for the chat endpoint. We don't try to
+// fully describe AI SDK's UIMessage shape here — just enough to reject
+// obviously malformed bodies and bound payload size so a single request
+// can't drain the per-day token budget.
+const messagePartSchema = z
+  .object({
+    type: z.string(),
+    text: z.string().max(4000).optional(),
+  })
+  .passthrough();
+
+const bodySchema = z.object({
+  conversationId: z.string().min(1).max(50),
+  messages: z
+    .array(
+      z.object({
+        id: z.string(),
+        role: z.enum(['user', 'assistant', 'system']),
+        parts: z.array(messagePartSchema).max(20),
+      }),
+    )
+    .min(1)
+    .max(50),
+});
 
 export async function POST(req: Request) {
   // 1. Auth — must come before any DB/Redis access.
@@ -43,13 +64,20 @@ export async function POST(req: Request) {
     });
   }
 
-  let body: IncomingBody;
+  let raw: unknown;
   try {
-    body = (await req.json()) as IncomingBody;
+    raw = await req.json();
   } catch {
     return new Response('invalid json', { status: 400 });
   }
-  const { messages, conversationId } = body;
+  const parsed = bodySchema.safeParse(raw);
+  if (!parsed.success) {
+    return new Response('invalid body', { status: 400 });
+  }
+  const { conversationId } = parsed.data;
+  // Cast to UIMessage[]: schema verified the structural shape (id / role /
+  // parts), passthrough preserves any extra fields AI SDK emits.
+  const messages = parsed.data.messages as unknown as UIMessage[];
 
   // 3. Ownership check — conversation must belong to current user.
   //    Also pull provider + title so we can route to the user-selected model
