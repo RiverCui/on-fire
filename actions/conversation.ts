@@ -30,7 +30,9 @@ export async function createConversation(title?: string) {
     data: { userId, ...(title ? { title } : {}) },
     select: { id: true },
   });
-  revalidatePath('/[locale]/dashboard/chat', 'page');
+  // No revalidate here: only caller is ChatIndex page render, which redirects
+  // to /chat/[id]; the parent layout re-fetches listConversations on that
+  // navigation. Calling revalidatePath during render is illegal in Next.js 16.
   return conv;
 }
 
