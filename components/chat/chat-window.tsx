@@ -3,6 +3,7 @@
 import { useState, useMemo, useRef, useEffect, useTransition } from 'react';
 import { useChat } from '@ai-sdk/react';
 import { DefaultChatTransport, type UIMessage } from 'ai';
+import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { Rows3, Rows2 } from 'lucide-react';
 import { MessageList } from './message-list';
@@ -33,6 +34,7 @@ const PROVIDER_LABEL: Record<AIProvider, string> = {
 
 export function ChatWindow({ conversationId, initialProvider, initialMessages }: Props) {
   const t = useTranslations('Chat');
+  const router = useRouter();
   const [theme, setTheme] = useState<ChatTheme>('default');
   const [provider, setProvider] = useState<AIProvider | null>(initialProvider);
   const [, startTransition] = useTransition();
@@ -76,9 +78,11 @@ export function ChatWindow({ conversationId, initialProvider, initialMessages }:
   useEffect(() => {
     if (prevStreamingRef.current && !streaming) {
       inputHandleRef.current?.focus();
+      // Pull the latest sidebar (auto-generated title shows up on first exchange).
+      router.refresh();
     }
     prevStreamingRef.current = streaming;
-  }, [streaming]);
+  }, [streaming, router]);
 
   return (
     <ChatThemeContext.Provider value={theme}>

@@ -98,6 +98,31 @@ export async function updateConversationProvider(
   return { provider };
 }
 
+/**
+ * Rename a conversation (manual override). Length-bounded to keep the
+ * sidebar tidy; empty / whitespace-only input is rejected so users don't
+ * accidentally erase the title.
+ */
+export async function renameConversation(conversationId: string, title: string) {
+  const userId = await requireUserId();
+  const trimmed = title.trim();
+  if (trimmed.length === 0) throw new Error('Title cannot be empty');
+  if (trimmed.length > 50) throw new Error('Title too long');
+
+  const conv = await prisma.conversation.findFirst({
+    where: { id: conversationId, userId },
+    select: { id: true },
+  });
+  if (!conv) throw new Error('Not found');
+
+  await prisma.conversation.update({
+    where: { id: conversationId },
+    data: { title: trimmed },
+  });
+  revalidatePath('/[locale]/dashboard/chat', 'layout');
+  return { title: trimmed };
+}
+
 export async function deleteConversation(conversationId: string) {
   const userId = await requireUserId();
   const conv = await prisma.conversation.findFirst({

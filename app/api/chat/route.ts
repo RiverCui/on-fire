@@ -7,6 +7,7 @@ import {
 import { auth } from '@/auth';
 import { getModel, isAIProvider } from '@/lib/ai/provider';
 import { buildTools } from '@/lib/ai/tools';
+import { generateConversationTitle } from '@/lib/ai/title';
 import { SYSTEM_PROMPT, truncateContext } from '@/lib/ai/prompt';
 import { checkChatLimit } from '@/lib/ai/ratelimit';
 import { redis } from '@/lib/redis';
@@ -51,13 +52,15 @@ export async function POST(req: Request) {
   const { messages, conversationId } = body;
 
   // 3. Ownership check — conversation must belong to current user.
-  //    Also pull provider so we can route to the user-selected model.
+  //    Also pull provider + title so we can route to the user-selected model
+  //    and decide whether to auto-name the conversation later.
   const conv = await prisma.conversation.findFirst({
     where: { id: conversationId, userId },
-    select: { id: true, provider: true },
+    select: { id: true, provider: true, title: true },
   });
   if (!conv) return new Response('not found', { status: 404 });
   const providerOverride = isAIProvider(conv.provider) ? conv.provider : undefined;
+  const needsAutoTitle = conv.title === '新对话';
 
   // 4. Truncate to last 10 messages for context window control.
   const windowed = truncateContext(messages, 10);
@@ -95,6 +98,27 @@ export async function POST(req: Request) {
         });
       } catch (err) {
         console.error('[chat] persist failed', { conversationId, err });
+      }
+
+      // Auto-name the conversation on its first exchange. Best-effort:
+      // generation runs synchronously here so the client `router.refresh()`
+      // after stream-end will see the new title; failures fall back silently.
+      if (needsAutoTitle && userText && assistantText) {
+        try {
+          const title = await generateConversationTitle(
+            userText,
+            assistantText,
+            providerOverride,
+          );
+          if (title && title !== '新对话') {
+            await prisma.conversation.update({
+              where: { id: conversationId },
+              data: { title },
+            });
+          }
+        } catch (err) {
+          console.warn('[chat] auto-title failed', { conversationId, err });
+        }
       }
 
       try {

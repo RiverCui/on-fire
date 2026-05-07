@@ -352,6 +352,8 @@
     "rateLimited": "Too many requests. Please try again later.",
     "providerLabel": "AI model",
     "providerHint": "Pick the AI model for this conversation",
-    "providerLockedHint": "Conversation has started; model is locked"
+    "providerLockedHint": "Conversation has started; model is locked",
+    "renameLabel": "Conversation title",
+    "renameHint": "Double-click to rename"
   }
 }

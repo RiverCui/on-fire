@@ -352,6 +352,8 @@
     "rateLimited": "请求过于频繁，请稍后再试",
     "providerLabel": "AI 模型",
     "providerHint": "选择本对话使用的 AI 模型",
-    "providerLockedHint": "对话已开始，模型不可更改"
+    "providerLockedHint": "对话已开始，模型不可更改",
+    "renameLabel": "对话标题",
+    "renameHint": "双击可重命名"
   }
 }
