@@ -4,15 +4,16 @@ import { ChatWindow } from '@/components/chat/chat-window';
 export default async function ConversationPage({
   params,
 }: {
-  params: Promise<{ conversationId: string }>;
+  params: Promise<{ locale: string; conversationId: string }>;
 }) {
-  const { conversationId } = await params;
+  const { locale, conversationId } = await params;
   const [initialMessages, provider] = await Promise.all([
     getMessages(conversationId),
     getConversationProvider(conversationId),
   ]);
   return (
     <ChatWindow
+      locale={locale}
       conversationId={conversationId}
       initialProvider={provider}
       initialMessages={initialMessages.map((m) => ({

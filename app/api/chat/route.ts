@@ -6,7 +6,7 @@ import {
 } from 'ai';
 import { z } from 'zod';
 import { auth } from '@/auth';
-import { getModel, isAIProvider } from '@/lib/ai/provider';
+import { getModel, isAIProvider, VALID_PROVIDERS, type AIProvider } from '@/lib/ai/provider';
 import { buildTools } from '@/lib/ai/tools';
 import { generateConversationTitle } from '@/lib/ai/title';
 import { SYSTEM_PROMPT, truncateContext } from '@/lib/ai/prompt';
@@ -32,7 +32,12 @@ const messagePartSchema = z
   .passthrough();
 
 const bodySchema = z.object({
-  conversationId: z.string().min(1).max(50),
+  // Optional: when omitted, the conversation is created lazily on first message
+  // so navigating to /chat doesn't pile up empty rows.
+  conversationId: z.string().min(1).max(50).optional(),
+  // Only honored on lazy creation — provider for an existing conversation is
+  // immutable once messages exist (enforced elsewhere).
+  provider: z.enum([...VALID_PROVIDERS] as [AIProvider, ...AIProvider[]]).optional(),
   messages: z
     .array(
       z.object({
@@ -74,21 +79,40 @@ export async function POST(req: Request) {
   if (!parsed.success) {
     return new Response('invalid body', { status: 400 });
   }
-  const { conversationId } = parsed.data;
+  const { conversationId: incomingId, provider: draftProvider } = parsed.data;
   // Cast to UIMessage[]: schema verified the structural shape (id / role /
   // parts), passthrough preserves any extra fields AI SDK emits.
   const messages = parsed.data.messages as unknown as UIMessage[];
 
-  // 3. Ownership check — conversation must belong to current user.
-  //    Also pull provider + title so we can route to the user-selected model
-  //    and decide whether to auto-name the conversation later.
-  const conv = await prisma.conversation.findFirst({
-    where: { id: conversationId, userId },
-    select: { id: true, provider: true, title: true },
-  });
-  if (!conv) return new Response('not found', { status: 404 });
-  const providerOverride = isAIProvider(conv.provider) ? conv.provider : undefined;
-  const needsAutoTitle = conv.title === '新对话';
+  // 3. Resolve conversation:
+  //    - With incoming id: ownership check.
+  //    - Without id: lazy-create (first message of a draft session). The draft
+  //      provider — if any — is locked in at creation time. The new id is
+  //      streamed back to the client via messageMetadata so the URL can sync.
+  let conversationId: string;
+  let providerOverride: AIProvider | undefined;
+  let needsAutoTitle: boolean;
+
+  if (incomingId) {
+    const conv = await prisma.conversation.findFirst({
+      where: { id: incomingId, userId },
+      select: { id: true, provider: true, title: true },
+    });
+    if (!conv) return new Response('not found', { status: 404 });
+    conversationId = conv.id;
+    providerOverride = isAIProvider(conv.provider) ? conv.provider : undefined;
+    needsAutoTitle = conv.title === '新对话';
+  } else {
+    const created = await prisma.conversation.create({
+      data: { userId, ...(draftProvider ? { provider: draftProvider } : {}) },
+      select: { id: true, provider: true },
+    });
+    conversationId = created.id;
+    providerOverride = isAIProvider(created.provider) ? created.provider : undefined;
+    needsAutoTitle = true;
+  }
+  // Non-null only when we just lazy-created — used to push id back to client.
+  const newlyCreatedId = incomingId ? null : conversationId;
 
   // 4. Truncate to last 10 messages for context window control.
   const windowed = truncateContext(messages, 10);
@@ -157,5 +181,13 @@ export async function POST(req: Request) {
     },
   });
 
-  return result.toUIMessageStreamResponse();
+  return result.toUIMessageStreamResponse({
+    // On lazy creation, push the new id to the client on stream-start so it
+    // can swap the URL from /chat to /chat/[newId] without a navigation.
+    messageMetadata: ({ part }) => {
+      if (newlyCreatedId && part.type === 'start') {
+        return { conversationId: newlyCreatedId };
+      }
+    },
+  });
 }

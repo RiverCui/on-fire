@@ -24,18 +24,6 @@ export async function listConversations() {
   });
 }
 
-export async function createConversation(title?: string) {
-  const userId = await requireUserId();
-  const conv = await prisma.conversation.create({
-    data: { userId, ...(title ? { title } : {}) },
-    select: { id: true },
-  });
-  // No revalidate here: only caller is ChatIndex page render, which redirects
-  // to /chat/[id]; the parent layout re-fetches listConversations on that
-  // navigation. Calling revalidatePath during render is illegal in Next.js 16.
-  return conv;
-}
-
 export async function getConversationProvider(
   conversationId: string,
 ): Promise<AIProvider | null> {
