@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useMemo, useRef, useEffect } from 'react';
+import { useState, useMemo, useRef, useEffect, useTransition } from 'react';
 import { useChat } from '@ai-sdk/react';
 import { DefaultChatTransport, type UIMessage } from 'ai';
 import { useTranslations } from 'next-intl';
@@ -9,15 +9,33 @@ import { MessageList } from './message-list';
 import { ChatInput, type ChatInputHandle } from './chat-input';
 import { EmptyState } from './empty-state';
 import { ChatThemeContext, type ChatTheme } from './chat-theme-context';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import { updateConversationProvider } from '@/actions/conversation';
+import { VALID_PROVIDERS, type AIProvider } from '@/lib/ai/provider';
 
 type Props = {
   conversationId: string;
+  initialProvider: AIProvider | null;
   initialMessages: UIMessage[];
 };
 
-export function ChatWindow({ conversationId, initialMessages }: Props) {
+const PROVIDER_LABEL: Record<AIProvider, string> = {
+  deepseek: 'DeepSeek',
+  anthropic: 'Claude',
+  openai: 'GPT',
+};
+
+export function ChatWindow({ conversationId, initialProvider, initialMessages }: Props) {
   const t = useTranslations('Chat');
   const [theme, setTheme] = useState<ChatTheme>('default');
+  const [provider, setProvider] = useState<AIProvider | null>(initialProvider);
+  const [, startTransition] = useTransition();
   const transport = useMemo(
     () =>
       new DefaultChatTransport({
@@ -34,6 +52,23 @@ export function ChatWindow({ conversationId, initialMessages }: Props) {
 
   const streaming = status === 'submitted' || status === 'streaming';
   const isCompact = theme === 'compact';
+  const providerLocked = messages.length > 0;
+  const currentProvider: AIProvider = provider ?? 'deepseek';
+
+  const handleProviderChange = (next: string) => {
+    if (!(VALID_PROVIDERS as readonly string[]).includes(next)) return;
+    const nextProvider = next as AIProvider;
+    const prev = provider;
+    setProvider(nextProvider); // optimistic
+    startTransition(async () => {
+      try {
+        await updateConversationProvider(conversationId, nextProvider);
+      } catch (err) {
+        console.error('[chat] provider switch failed', err);
+        setProvider(prev); // revert
+      }
+    });
+  };
 
   const inputHandleRef = useRef<ChatInputHandle>(null);
 
@@ -48,8 +83,28 @@ export function ChatWindow({ conversationId, initialMessages }: Props) {
   return (
     <ChatThemeContext.Provider value={theme}>
       <div className="flex h-full flex-col">
-        {/* 顶部工具栏:紧凑/默认模式切换 */}
-        <div className="flex items-center justify-end border-b border-slate-200/80 px-4 py-2 dark:border-white/10">
+        {/* 顶部工具栏:provider 切换 + 紧凑/默认模式 */}
+        <div className="flex items-center justify-between gap-2 border-b border-slate-200/80 px-4 py-2 dark:border-white/10">
+          <Select
+            value={currentProvider}
+            onValueChange={handleProviderChange}
+            disabled={providerLocked}
+          >
+            <SelectTrigger
+              className="h-7 w-32 rounded-full text-xs"
+              title={providerLocked ? t('providerLockedHint') : t('providerHint')}
+              aria-label={t('providerLabel')}
+            >
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              {VALID_PROVIDERS.map((p) => (
+                <SelectItem key={p} value={p} className="text-xs">
+                  {PROVIDER_LABEL[p]}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
           <button
             type="button"
             onClick={() => setTheme((prev) => (prev === 'default' ? 'compact' : 'default'))}

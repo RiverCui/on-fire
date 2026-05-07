@@ -154,6 +154,9 @@ model Conversation {
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   title     String   @default("新对话")
+  // AI provider for this conversation: "deepseek" | "anthropic" | "openai".
+  // Null = follow server default (AI_PROVIDER env). Locked once messages exist.
+  provider  String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 

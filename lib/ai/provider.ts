@@ -6,7 +6,11 @@ import type { LanguageModel } from 'ai';
 export type AIProvider = 'deepseek' | 'anthropic' | 'openai';
 
 const DEFAULT_PROVIDER: AIProvider = 'deepseek';
-const VALID_PROVIDERS: readonly AIProvider[] = ['deepseek', 'anthropic', 'openai'];
+export const VALID_PROVIDERS: readonly AIProvider[] = ['deepseek', 'anthropic', 'openai'];
+
+export function isAIProvider(value: unknown): value is AIProvider {
+  return typeof value === 'string' && (VALID_PROVIDERS as readonly string[]).includes(value);
+}
 
 function resolveProvider(override?: AIProvider): AIProvider {
   const raw = override ?? process.env.AI_PROVIDER ?? DEFAULT_PROVIDER;

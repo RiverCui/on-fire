@@ -5,7 +5,7 @@ import {
   type UIMessage,
 } from 'ai';
 import { auth } from '@/auth';
-import { getModel } from '@/lib/ai/provider';
+import { getModel, isAIProvider } from '@/lib/ai/provider';
 import { buildTools } from '@/lib/ai/tools';
 import { SYSTEM_PROMPT, truncateContext } from '@/lib/ai/prompt';
 import { checkChatLimit } from '@/lib/ai/ratelimit';
@@ -51,11 +51,13 @@ export async function POST(req: Request) {
   const { messages, conversationId } = body;
 
   // 3. Ownership check — conversation must belong to current user.
+  //    Also pull provider so we can route to the user-selected model.
   const conv = await prisma.conversation.findFirst({
     where: { id: conversationId, userId },
-    select: { id: true },
+    select: { id: true, provider: true },
   });
   if (!conv) return new Response('not found', { status: 404 });
+  const providerOverride = isAIProvider(conv.provider) ? conv.provider : undefined;
 
   // 4. Truncate to last 10 messages for context window control.
   const windowed = truncateContext(messages, 10);
@@ -75,7 +77,7 @@ export async function POST(req: Request) {
   // `convertToModelMessages` is async in AI SDK v6.
   const modelMessages = await convertToModelMessages(windowed);
   const result = streamText({
-    model: getModel(),
+    model: getModel(providerOverride),
     system: SYSTEM_PROMPT,
     messages: modelMessages,
     tools: buildTools(userId),

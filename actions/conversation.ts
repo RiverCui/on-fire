@@ -6,6 +6,7 @@ import prisma from '@/lib/prisma';
 import { redis } from '@/lib/redis';
 import { ctxKey } from '@/lib/redis/cache';
 import type { MessageRole } from '@/generated/prisma/client';
+import { isAIProvider, type AIProvider } from '@/lib/ai/provider';
 
 async function requireUserId(): Promise<string> {
   const session = await auth();
@@ -33,6 +34,18 @@ export async function createConversation(title?: string) {
   return conv;
 }
 
+export async function getConversationProvider(
+  conversationId: string,
+): Promise<AIProvider | null> {
+  const userId = await requireUserId();
+  const conv = await prisma.conversation.findFirst({
+    where: { id: conversationId, userId },
+    select: { provider: true },
+  });
+  if (!conv) throw new Error('Not found');
+  return isAIProvider(conv.provider) ? conv.provider : null;
+}
+
 export async function getMessages(conversationId: string) {
   const userId = await requireUserId();
   const conv = await prisma.conversation.findFirst({
@@ -56,6 +69,31 @@ export async function getMessages(conversationId: string) {
   // TTL 30 min (1800s); write path in /api/chat deletes this key after persisting.
   await redis.set(ctxKey(conversationId), rows, { ex: 1800 });
   return rows;
+}
+
+/**
+ * Switch the AI provider for a conversation.
+ * Locked once any message exists, to keep the model consistent across context.
+ */
+export async function updateConversationProvider(
+  conversationId: string,
+  provider: AIProvider,
+) {
+  const userId = await requireUserId();
+  if (!isAIProvider(provider)) throw new Error('Invalid provider');
+
+  const conv = await prisma.conversation.findFirst({
+    where: { id: conversationId, userId },
+    select: { id: true, _count: { select: { messages: true } } },
+  });
+  if (!conv) throw new Error('Not found');
+  if (conv._count.messages > 0) throw new Error('Provider locked: conversation already started');
+
+  await prisma.conversation.update({
+    where: { id: conversationId },
+    data: { provider },
+  });
+  return { provider };
 }
 
 export async function deleteConversation(conversationId: string) {
